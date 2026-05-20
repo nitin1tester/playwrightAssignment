@@ -1,0 +1,754 @@
+README.md
+
+Playwright Hybrid Automation Framework
+
+This README includes:
+
+* Setup instructions
+* How to run tests locally
+* Framework architecture explanation
+* Team onboarding guide
+* CI/CD pipeline details
+
+Overview
+
+This project is a scalable hybrid automation framework built using Playwright + TypeScript.
+
+The framework supports:
+
+* UI Automation
+* API Automation
+* Cross-browser execution
+* CI/CD integration using GitHub Actions
+* Allure Reporting
+* Structured logging using Pino
+* Scalable Page Object Model architecture
+* Reusable API client architecture
+* Parallel execution support
+
+The framework is designed following enterprise-level automation architecture principles suitable for large-scale test automation projects.
+
+⸻
+
+Tech Stack
+
+Tool	Purpose
+Playwright	UI + API automation
+TypeScript	Programming language
+Pino	Structured logging
+Allure	Reporting
+GitHub Actions	CI/CD
+Node.js	Runtime
+
+⸻
+
+Framework Architecture
+
+The framework is designed using enterprise-grade automation architecture principles with proper separation between reusable framework components and executable test cases.
+
+High-Level Design
+
+PWSwagLabsUIFramework
+│
+├── allure-report
+├── allure-results
+├── logs
+│   └── application.log
+│
+├── node_modules
+├── playwright-report
+├── test-results
+│
+├── src
+│   ├── api
+│   │   ├── clients
+│   │   └── data
+│   │
+│   ├── gui
+│   │   ├── data
+│   │   ├── error
+│   │   ├── fixtures
+│   │   └── pages
+│   │
+│   └── utils
+│       ├── ElementUtil.ts
+│       └── logger.ts
+│
+├── tests
+│   ├── api
+│   │   └── booking
+│   │       └── restfulbooker.spec.ts
+│   │
+│   └── gui
+│       └── swaglabs
+│           ├── checkoutpage.spec.ts
+│           ├── inventorypage.spec.ts
+│           └── loginpage.spec.ts
+│
+├── playwright.config.ts
+├── playwright.config.qa.ts
+├── playwright.config.stage.ts
+├── tsconfig.json
+├── package.json
+└── README.md
+
+The framework is divided into reusable framework components and executable test cases.
+
+* src → reusable framework code
+* tests → executable automation test cases
+* logs → framework execution logs
+* reports → execution reports and artifacts
+* configs → environment-specific configurations
+
+Benefits:
+
+* scalable architecture
+* reusable framework components
+* maintainable test design
+* better team onboarding
+* clean separation of concerns
+
+⸻
+
+API Layer
+
+Location:
+
+src/api
+
+src/api/clients
+
+Contains reusable API client classes.
+
+Responsibilities:
+
+* centralized API calls
+* reusable CRUD methods
+* authentication handling
+* request abstraction
+* logging integration
+
+Example:
+
+await client.createBooking();
+await client.updateBooking();
+
+⸻
+
+src/api/data
+
+Contains reusable API payloads and test data.
+
+Benefits:
+
+* reusable request payloads
+* centralized data management
+* easy maintenance
+
+⸻
+
+UI Layer
+
+Location:
+
+src/gui
+
+The UI framework follows the Page Object Model (POM) design pattern.
+
+Benefits:
+
+* reusable page methods
+* reduced locator duplication
+* better readability
+* scalable UI architecture
+
+⸻
+
+src/gui/pages
+
+Contains Page Object classes.
+
+Responsibilities:
+
+* locators
+* page actions
+* business workflows
+
+Example:
+
+await loginPage.doLogin();
+
+⸻
+
+src/gui/data
+
+Contains UI test data.
+
+Examples:
+
+* CSV files
+* test users
+* checkout data
+
+Supports data-driven testing.
+
+⸻
+
+src/gui/fixtures
+
+Contains reusable Playwright fixtures.
+
+Used for:
+
+* dependency injection
+* common setup
+* shared initialization
+* reusable test setup
+
+⸻
+
+src/gui/error
+
+Contains custom framework error handling.
+
+Used for:
+
+* reusable framework exceptions
+* validation handling
+* centralized error abstraction
+
+⸻
+
+Utilities Layer
+
+Location:
+
+src/utils
+
+Contains reusable helper classes.
+
+logger.ts
+
+Centralized logging utility using Pino Logger.
+
+Features:
+
+* console logging
+* file logging
+* structured logs
+* error tracking
+* execution traceability
+
+Log output:
+
+logs/application.log
+
+⸻
+
+ElementUtil.ts
+
+Reusable Playwright helper methods.
+
+Examples:
+
+* click utilities
+* wait utilities
+* visibility utilities
+* reusable UI actions
+
+⸻
+
+Tests Layer
+
+Location:
+
+tests
+
+Contains executable automation test cases.
+
+⸻
+
+tests/api
+
+Contains API automation test cases.
+
+Examples:
+
+* authentication tests
+* booking CRUD validation
+* API negative scenarios
+
+⸻
+
+tests/gui
+
+Contains UI automation test cases.
+
+Examples:
+
+* login validation
+* inventory validation
+* checkout flow validation
+
+Supports cross-browser execution.
+
+⸻
+
+Reports & Execution Artifacts
+
+allure-results
+
+Stores raw Allure execution data.
+
+⸻
+
+allure-report
+
+Generated Allure HTML report.
+
+⸻
+
+playwright-report
+
+Default Playwright HTML report.
+
+⸻
+
+test-results
+
+Stores screenshots, traces, and videos.
+
+⸻
+
+Logging
+
+Location:
+
+logs/application.log
+
+The framework uses centralized structured logging for:
+
+* API execution tracking
+* debugging
+* execution monitoring
+* error analysis
+
+⸻
+
+Environment Configurations
+
+Files:
+
+playwright.config.qa.ts
+playwright.config.stage.ts
+
+Purpose:
+
+* environment-specific execution
+* QA/stage separation
+* scalable configuration management
+
+⸻
+
+Configuration Files
+
+playwright.config.ts
+
+Controls:
+
+* projects
+* workers
+* retries
+* reporters
+* screenshots
+* traces
+* browser execution
+
+⸻
+
+tsconfig.json
+
+TypeScript compiler configuration.
+
+⸻
+
+package.json
+
+Dependency management and execution scripts.
+
+⸻
+
+Architectural Principles Followed
+
+* Page Object Model
+* Reusable API client architecture
+* Separation of concerns
+* Structured logging
+* Data-driven testing
+* Parallel execution support
+* CI/CD readiness
+* Reusable utilities
+* Cross-browser support
+* Scalable folder organization
+
+PWSwagLabsUIFramework
+│
+├── allure-report
+├── allure-results
+├── logs
+│   └── application.log
+│
+├── node_modules
+├── playwright-report
+├── test-results
+│
+├── src
+│   ├── api
+│   │   ├── clients
+│   │   └── data
+│   │
+│   ├── gui
+│   │   ├── data
+│   │   ├── error
+│   │   ├── fixtures
+│   │   └── pages
+│   │
+│   └── utils
+│       ├── ElementUtil.ts
+│       └── logger.ts
+│
+├── tests
+│   ├── api
+│   │   └── booking
+│   │       └── restfulbooker.spec.ts
+│   │
+│   └── gui
+│       └── swaglabs
+│           ├── checkoutpage.spec.ts
+│           ├── inventorypage.spec.ts
+│           └── loginpage.spec.ts
+│
+├── playwright.config.ts
+├── playwright.config.qa.ts
+├── playwright.config.stage.ts
+├── tsconfig.json
+├── package.json
+└── README.md
+
+⸻
+
+Framework Design Principles
+
+UI Layer
+
+The UI layer follows the Page Object Model (POM) design pattern.
+
+Benefits:
+
+* Reusability
+* Maintainability
+* Reduced duplication
+* Better readability
+* Easier onboarding
+
+Location:
+
+src/ui/pages
+
+⸻
+
+API Layer
+
+API interactions are abstracted into reusable API clients.
+
+Benefits:
+
+* Centralized request handling
+* Reusable CRUD operations
+* Clean test cases
+* Better scalability
+
+Location:
+
+src/api/clients
+
+⸻
+
+Fixtures
+
+Custom Playwright fixtures are used for:
+
+* Dependency injection
+* Shared setup
+* Shared teardown
+* Common test initialization
+
+Location:
+
+src/gui/fixtures
+
+⸻
+
+Utilities
+
+Utility classes are implemented for:
+
+* Logging
+* CSV handling
+* Config management
+* Common helper methods
+
+Location:
+
+src/utils
+
+⸻
+
+Logging
+
+The framework uses Pino Logger for structured logging.
+
+Features:
+
+* Console logging
+* File logging
+* JSON structured logs
+* Error stack trace logging
+* Environment-aware logging
+
+Log file location:
+
+logs/application.log
+
+⸻
+
+Reporting
+
+The framework supports:
+
+* Playwright HTML Report
+* Allure Report
+
+⸻
+
+Installation
+
+Clone Repository
+
+git clone https://github.com/nitin1tester/playwrightAssignment.git
+
+
+⸻
+
+Install Dependencies
+
+npm install
+
+⸻
+
+Install Playwright Browsers
+
+npx playwright install
+
+⸻
+
+Running Tests
+
+Run All Tests
+
+npx playwright test
+
+⸻
+
+Run API Tests Only
+
+npx playwright test --project=API
+
+⸻
+
+Run Firefox UI Tests
+
+npx playwright test --project=firefox
+
+⸻
+
+Run Chrome UI Tests
+
+npx playwright test --project="Google Chrome"
+
+⸻
+
+Run Specific Spec File
+
+npx playwright test tests/ui/swaglabs/login.spec.ts
+
+⸻
+
+Reports
+
+Playwright HTML Report
+
+npx playwright show-report
+
+⸻
+
+Allure Report
+
+Install Allure:- 
+
+npm install --save-dev allure-playwright allure-commandline
+
+Generate report:
+
+allure generate allure-results --clean -o allure-report
+
+Serve report:
+
+allure serve allure-results
+
+⸻
+This will install:
+- csv-parse
+- Pino
+- pino-pretty
+
+npm install csv-parse@^6.2.1 pino@^10.3.1 pino-pretty@^13.1.3
+
+and automatically update your package.json.
+⸻
+
+Parallel Execution Strategy
+
+The framework supports controlled parallel execution.
+
+Configuration:
+
+workers: process.env.CI ? 2 : 3
+
+Benefits:
+
+* Faster execution
+* Stable browser execution
+* Better CI performance
+* Reduced flaky behavior
+
+⸻
+
+GitHub Actions CI/CD
+
+Workflow File Location
+
+.github/workflows/playwright.yml
+
+⸻
+
+GitHub Actions Workflow
+
+name: Playwright Tests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Dependencies
+        run: npm install
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright Tests
+        run: npx playwright test
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results/
+
+⸻
+
+Team Onboarding Guide
+
+Step 1
+
+Clone repository:
+
+git clone <repository-url>
+
+⸻
+
+Step 2
+
+Install dependencies:
+
+npm install
+
+⸻
+
+Step 3
+
+Install Playwright browsers:
+
+npx playwright install
+
+⸻
+
+Step 4
+
+Run tests:
+
+npx playwright test
+
+⸻
+
+Best Practices Followed
+
+* Page Object Model
+* Reusable API clients
+* Structured logging
+* Parallel execution control
+* Browser-specific projects
+* Separation of framework and tests
+* Environment-driven configuration
+* CI/CD ready architecture
+* Reusable fixtures
+* Reporting integration
+
+⸻
+
+Future Improvements
+
+Potential future enhancements:
+
+* Docker integration
+* Slack reporting
+* Email reporting
+* Data-driven execution from external sources
+* Environment management
+* API schema validation
+* Visual testing
+* Accessibility testing
+* Performance testing integration
+
+⸻
+
+Author
+
+Nitin Rastogi
+
+Lead SDET Automation Framework
