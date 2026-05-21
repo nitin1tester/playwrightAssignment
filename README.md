@@ -48,49 +48,9 @@ The framework is designed using enterprise-grade automation architecture princip
 
 High-Level Design
 
+<img width="395" height="863" alt="Screenshot 2026-05-20 at 21 56 56" src="https://github.com/user-attachments/assets/c9eab4c3-d8ff-4f8a-8efd-cd4c1411b012" />
+
 PWSwagLabsUIFramework
-│
-├── allure-report
-├── allure-results
-├── logs
-│   └── application.log
-│
-├── node_modules
-├── playwright-report
-├── test-results
-│
-├── src
-│   ├── api
-│   │   ├── clients
-│   │   └── data
-│   │
-│   ├── gui
-│   │   ├── data
-│   │   ├── error
-│   │   ├── fixtures
-│   │   └── pages
-│   │
-│   └── utils
-│       ├── ElementUtil.ts
-│       └── logger.ts
-│
-├── tests
-│   ├── api
-│   │   └── booking
-│   │       └── restfulbooker.spec.ts
-│   │
-│   └── gui
-│       └── swaglabs
-│           ├── checkoutpage.spec.ts
-│           ├── inventorypage.spec.ts
-│           └── loginpage.spec.ts
-│
-├── playwright.config.ts
-├── playwright.config.qa.ts
-├── playwright.config.stage.ts
-├── tsconfig.json
-├── package.json
-└── README.md
 
 The framework is divided into reusable framework components and executable test cases.
 
@@ -391,49 +351,9 @@ Architectural Principles Followed
 * Cross-browser support
 * Scalable folder organization
 
+<img width="395" height="863" alt="Screenshot 2026-05-20 at 21 56 56" src="https://github.com/user-attachments/assets/c9eab4c3-d8ff-4f8a-8efd-cd4c1411b012" />
+
 PWSwagLabsUIFramework
-│
-├── allure-report
-├── allure-results
-├── logs
-│   └── application.log
-│
-├── node_modules
-├── playwright-report
-├── test-results
-│
-├── src
-│   ├── api
-│   │   ├── clients
-│   │   └── data
-│   │
-│   ├── gui
-│   │   ├── data
-│   │   ├── error
-│   │   ├── fixtures
-│   │   └── pages
-│   │
-│   └── utils
-│       ├── ElementUtil.ts
-│       └── logger.ts
-│
-├── tests
-│   ├── api
-│   │   └── booking
-│   │       └── restfulbooker.spec.ts
-│   │
-│   └── gui
-│       └── swaglabs
-│           ├── checkoutpage.spec.ts
-│           ├── inventorypage.spec.ts
-│           └── loginpage.spec.ts
-│
-├── playwright.config.ts
-├── playwright.config.qa.ts
-├── playwright.config.stage.ts
-├── tsconfig.json
-├── package.json
-└── README.md
 
 ⸻
 
