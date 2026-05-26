@@ -24,7 +24,7 @@ export default defineConfig({
 
 
     trace: 'on-first-retry',
-    headless: true,
+    headless: false,
     screenshot: 'only-on-failure',
     video: "on"
 
@@ -40,7 +40,7 @@ export default defineConfig({
 
     {
       name: 'API',
-      workers:1,
+      workers: 1,
       testMatch: /.*api.*\.spec\.ts/,
     },
 
@@ -52,14 +52,14 @@ export default defineConfig({
 
     {
       name: 'firefox',
-      workers:2,
+      workers: 2,
       testMatch: /.*ui.*\.spec\.ts/,
       use: { ...devices['Desktop Firefox'] },
     },
 
     {
       name: 'webkit',
-      workers:2,
+      workers: 2,
       testMatch: /.*ui.*\.spec\.ts/,
       use: { ...devices['Desktop Safari'] },
     },
@@ -81,9 +81,16 @@ export default defineConfig({
     // },
     {
       name: 'Google Chrome',
-      workers:2,
+      workers: 2,
       testMatch: /.*ui.*\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        launchOptions: {
+          args: ['--start-maximized'],
+          ignoreDefaultArgs:['--window-size=1280,720']
+        },
+      },
     },
   ],
 });
