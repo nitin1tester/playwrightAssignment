@@ -9,6 +9,8 @@ node_modules/
 # =========================================================
 playwright-report/
 test-results/
+playwright-html-report/
+
 
 # =========================================================
 # Allure Reports
