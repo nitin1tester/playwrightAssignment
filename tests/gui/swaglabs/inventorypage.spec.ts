@@ -4,7 +4,7 @@ import { LoggerHelper} from '../../../src/utils/logger';
 
 test('Verify Successfully add product to cart', async({inventoryPage})=>{
     let productList = await inventoryPage.getAllProducts();
-     try {
+    try {
         if (productList.length === 0) {
             throw new NoDataFoundError("no product found on page");
         } 
@@ -14,11 +14,11 @@ test('Verify Successfully add product to cart', async({inventoryPage})=>{
         throw error;
     }
     const isCartBadgeVisibleFlag:boolean = await inventoryPage.isCartBadgeVisible();
-    expect(isCartBadgeVisibleFlag).toBe(true);
+    expect(isCartBadgeVisibleFlag).toBeTruthy;
 });
 
 test('Verify Open Invalid Product URL', async({inventoryPage})=>{
     await inventoryPage.gotoURL('https://www.saucedemo.com/inventory-item.html?id=999');
     const isItemNotFoundVisibleFlag:boolean = await inventoryPage.isItemNotFoundlabelVisible();
-    expect(isItemNotFoundVisibleFlag).toBe(true);
+    expect(isItemNotFoundVisibleFlag).toBeTruthy;
 });

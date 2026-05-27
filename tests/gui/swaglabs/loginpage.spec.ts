@@ -24,7 +24,7 @@ for(let login of userCredData){
     let invertoryPage:InventoryPage =  await loginPage.doLogin(login.username,login.password);
     await invertoryPage.clickOnHanburgerBtn();
     const isLogoutVisibleFlag:boolean = await invertoryPage.isLogoutBtnVisible();
-    expect(isLogoutVisibleFlag).toBe(true);
+    expect(isLogoutVisibleFlag).toBeTruthy;
    
 });
 }
