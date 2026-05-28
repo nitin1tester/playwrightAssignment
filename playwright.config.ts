@@ -59,21 +59,21 @@ export default defineConfig({
       testMatch: /.*api.*\.spec\.ts/,
     },
 
-    // {
-    //   name: 'chromium',
-    //   testMatch: /.*ui.*\.spec\.ts/,
-    //   use: { ...devices['Desktop Chrome'] },
-    // },
+    {
+      name: 'Chromium',
+      testMatch: /.*ui.*\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
 
     {
-      name: 'firefox',
+      name: 'Fireox',
       workers: 2,
       testMatch: /.*ui.*\.spec\.ts/,
       use: { ...devices['Desktop Firefox'] },
     },
 
     {
-      name: 'webkit',
+      name: 'WebKit',
       workers: 2,
       testMatch: /.*ui.*\.spec\.ts/,
       use: { ...devices['Desktop Safari'] },
@@ -90,10 +90,18 @@ export default defineConfig({
     // },
 
     /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
+    {
+      name: 'Microsoft Edge',
+      testMatch: /.*ui.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Edge'],
+        channel: 'msedge',
+        launchOptions: {
+          args: ['--start-maximized'],
+          ignoreDefaultArgs: ['--window-size=1280,720']
+        },
+      },
+    },
     {
       name: 'Google Chrome',
       workers: 2,

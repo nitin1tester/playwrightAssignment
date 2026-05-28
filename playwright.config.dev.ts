@@ -59,25 +59,25 @@ export default defineConfig({
       testMatch: /.*api.*\.spec\.ts/,
     },
 
-    // {
-    //   name: 'chromium',
-    //   testMatch: /.*ui.*\.spec\.ts/,
-    //   use: { ...devices['Desktop Chrome'] },
-    // },
+    {
+      name: 'Chromium',
+      testMatch: /.*ui.*\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
 
-    // {
-    //   name: 'firefox',
-    //   workers: 2,
-    //   testMatch: /.*ui.*\.spec\.ts/,
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
+    {
+      name: 'Fireox',
+      workers: 2,
+      testMatch: /.*ui.*\.spec\.ts/,
+      use: { ...devices['Desktop Firefox'] },
+    },
 
-    // {
-    //   name: 'webkit',
-    //   workers: 2,
-    //   testMatch: /.*ui.*\.spec\.ts/,
-    //   use: { ...devices['Desktop Safari'] },
-    // },
+    {
+      name: 'WebKit',
+      workers: 2,
+      testMatch: /.*ui.*\.spec\.ts/,
+      use: { ...devices['Desktop Safari'] },
+    },
 
     /* Test against mobile viewports. */
     // {
@@ -90,22 +90,30 @@ export default defineConfig({
     // },
 
     /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   workers: 2,
-    //   testMatch: /.*ui.*\.spec\.ts/,
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     channel: 'chrome',
-    //     launchOptions: {
-    //       args: ['--start-maximized'],
-    //       ignoreDefaultArgs: ['--window-size=1280,720']
-    //     },
-    //   },
-    // },
+    {
+      name: 'Microsoft Edge',
+      testMatch: /.*ui.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Edge'],
+        channel: 'msedge',
+        launchOptions: {
+          args: ['--start-maximized'],
+          ignoreDefaultArgs: ['--window-size=1280,720']
+        },
+      },
+    },
+    {
+      name: 'Google Chrome',
+      workers: 2,
+      testMatch: /.*ui.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        launchOptions: {
+          args: ['--start-maximized'],
+          ignoreDefaultArgs: ['--window-size=1280,720']
+        },
+      },
+    },
   ],
 });

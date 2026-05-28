@@ -30,6 +30,7 @@ on:
         default: 'Google Chrome'
         type: choice
         options:
+          - API
           - Google Chrome
           - Microsoft Edge
           - Chromium
