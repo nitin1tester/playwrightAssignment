@@ -10,6 +10,14 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["node", "@playwright/test"]
+    // "types": ["node"]
   },
-  "include": ["src/tests/**/*.ts", "playwright.config.ts"]
+  "include": [
+    "src/tests/**/*.ts", 
+    "playwright.config.ts",
+    "playwright.config.prod.ts",
+    "playwright.config.stage.ts",
+    "playwright.config.dev.ts",
+    "playwright.config.qa.ts"
+  ]
 }
