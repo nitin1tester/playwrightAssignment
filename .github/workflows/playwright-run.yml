@@ -3,7 +3,7 @@ name: Playwright & Allure Reports
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [ master, main ]
   pull_request:
 
 jobs:
