@@ -12,6 +12,14 @@ Welcome to the **PWSwagLabsUIFramework** automation project. Below you can find 
 
 ---
 
+## Dashboard 
+
+Click the badges below to view the Dashboard published via GitHub Pages:
+
+[![Playwright Dashboard](https://img.shields.io/badge/Playwright-Dashboard-pink)](https://nitin1tester.github.io/playwrightAssignment/)
+
+---
+
 ## HTML Reports
 
 Click the badges below to view the latest reports published via GitHub Pages:
@@ -19,6 +27,8 @@ Click the badges below to view the latest reports published via GitHub Pages:
 [![Playwright Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/playwright-report/index.html)
 [![Playwright HTML Reporter](https://img.shields.io/badge/Playwright_HTML-Report-green)](https://nitin1tester.github.io/playwrightAssignment/playwright-html-report/index.html)
 [![Allure Report](https://img.shields.io/badge/Allure-Report-red)](https://nitin1tester.github.io/playwrightAssignment/allure-report/index.html)
+
+
 
 ---
 
