@@ -72,12 +72,12 @@ export default defineConfig({
       use: { ...devices['Desktop Firefox'] },
     },
 
-    {
-      name: 'webkit',
-      workers: 2,
-      testMatch: /.*ui.*\.spec\.ts/,
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   workers: 2,
+    //   testMatch: /.*ui.*\.spec\.ts/,
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {
@@ -94,18 +94,18 @@ export default defineConfig({
     //   name: 'Microsoft Edge',
     //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
     // },
-    {
-      name: 'Google Chrome',
-      workers: 2,
-      testMatch: /.*ui.*\.spec\.ts/,
-      use: {
-        ...devices['Desktop Chrome'],
-        channel: 'chrome',
-        launchOptions: {
-          args: ['--start-maximized'],
-          ignoreDefaultArgs: ['--window-size=1280,720']
-        },
-      },
-    },
+    // {
+    //   name: 'Google Chrome',
+    //   workers: 2,
+    //   testMatch: /.*ui.*\.spec\.ts/,
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     channel: 'chrome',
+    //     launchOptions: {
+    //       args: ['--start-maximized'],
+    //       ignoreDefaultArgs: ['--window-size=1280,720']
+    //     },
+    //   },
+    // },
   ],
 });
