@@ -1,0 +1,151 @@
+name: Playwright & Allure Reports
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout repo
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4️⃣ Install Playwright Browsers (all configured browsers)
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium chrome msedge firefox webkit --with-deps
+
+      # 5️⃣ Run Playwright Tests (HTML report will be generated in playwright-report)
+      - name: Run Playwright Tests
+        run: npx playwright test tests/loginpage.spec.ts --config=playwright.config.ts
+
+      # 6️⃣ Generate Allure HTML Report
+      - name: Generate Allure Report
+        if: always()
+        run: |
+          if [ -d "allure-results" ]; then
+            npx allure generate allure-results --clean -o allure-report
+          else
+            echo "Allure results folder missing, skipping report generation."
+          fi
+
+      # 7️⃣ Verify reports exist
+      - name: Verify generated reports
+        if: always()
+        run: |
+          echo "Allure report contents:"
+          ls -R allure-report || echo "Allure report not found"
+          echo "Playwright built-in report contents:"
+          ls -R playwright-report || echo "Playwright report not found"
+          echo "Playwright HTML Reporter contents:"
+          ls -R playwright-html-report || echo "Playwright HTML report not found"
+
+      # 8️⃣ Upload artifacts
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+          if-no-files-found: warn
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          if-no-files-found: warn
+
+      - name: Upload Playwright HTML Reporter
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report
+          path: playwright-html-report/
+          if-no-files-found: warn
+
+  publish-reports:
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      # 1️⃣ Checkout repo
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2️⃣ Download artifacts
+      - name: Download Allure Report
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
+
+      - name: Download Playwright Report
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+
+      - name: Download Playwright HTML Reporter
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-html-report
+          path: playwright-html-report
+
+      # 3️⃣ Verify downloaded reports
+      - name: Verify reports
+        run: |
+          echo "Allure report contents:"
+          ls -R allure-report || echo "Allure report not available"
+          echo "Playwright built-in report contents:"
+          ls -R playwright-report || echo "Playwright report not available"
+          echo "Playwright HTML Reporter contents:"
+          ls -R playwright-html-report || echo "Playwright HTML report not available"
+
+      # 4️⃣ Prepare combined reports directory for GitHub Pages
+      - name: Prepare reports for deployment
+        run: |
+          mkdir -p gh-pages-deploy
+          [ -d "allure-report" ] && cp -r allure-report gh-pages-deploy/ || echo "Skipping allure-report (not found)"
+          [ -d "playwright-report" ] && cp -r playwright-report gh-pages-deploy/ || echo "Skipping playwright-report (not found)"
+          [ -d "playwright-html-report" ] && cp -r playwright-html-report gh-pages-deploy/ || echo "Skipping playwright-html-report (not found)"
+          echo "Combined reports directory contents:"
+          ls -R gh-pages-deploy
+
+      # 5️⃣ Publish reports to GitHub Pages
+      - name: Publish Reports to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: gh-pages-deploy
+          force_orphan: true
+
+      # 6️⃣ Print final URLs
+      - name: Report URLs
+        run: |
+          echo "Reports Published!"
+          echo "Playwright Built-in: https://nitin1tester.github.io/playwrightAssignment/playwright-report/index.html"
+          echo "Playwright HTML Reporter: https://nitin1tester.github.io/playwrightAssignment/playwright-html-report/index.html"
+          echo "Allure: https://nitin1tester.github.io/playwrightAssignment/allure-report/index.html"
