@@ -17,7 +17,7 @@ let userCredData = [
 
 for(let login of userCredData){
 
-    test(`Positive: Successful login with valid credentials ${login.username}`, async({page,baseURL})=>{
+    test(`Positive: Successful login with valid credentials ${login.username}`,{tag:['@production', '@smoke','@sanity','@regression']}, async({page,baseURL})=>{
     console.table(login);
     let loginPage:LoginPage = new LoginPage(page);
     await loginPage.goToLoginPage(baseURL);
@@ -30,7 +30,7 @@ for(let login of userCredData){
 }
 
 
-test('Negative: Login failure with invalid credentials', async({page,baseURL})=>{
+test('Negative: Login failure with invalid credentials',{tag:['@regression']} , async({page,baseURL})=>{
     let loginPage = new LoginPage(page);
     await loginPage.goToLoginPage(baseURL);
     await loginPage.doLogin(`wrongData`,`secret_sauce`);

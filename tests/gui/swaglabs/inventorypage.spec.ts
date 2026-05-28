@@ -2,7 +2,7 @@ import { test,expect} from "../../../src/gui/fixtures/baseFixtures";
 import {NoDataFoundError, } from '../../../src/gui/error/custom-error'
 import { LoggerHelper} from '../../../src/utils/logger';
 
-test('Verify Successfully add product to cart', async({inventoryPage})=>{
+test('Verify Successfully add product to cart @smoke', async({inventoryPage})=>{
     let productList = await inventoryPage.getAllProducts();
     try {
         if (productList.length === 0) {
