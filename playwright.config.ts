@@ -39,7 +39,7 @@ export default defineConfig({
  
 
     trace: 'on-first-retry',
-    headless: false,
+    headless: !!process.env.CI, // false locally and true in CI
     screenshot: 'only-on-failure',
     video: 'retain-on-failure'
 

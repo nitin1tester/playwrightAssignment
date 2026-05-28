@@ -1,0 +1,259 @@
+# ============================================
+# OPTION 2: MANUAL SELECTION PIPELINE
+# ============================================
+# Select: Environment (dev/qa/stage/prod)
+# Select: Browser (matches your project names)
+# Trigger: Manual only (workflow_dispatch)
+# ✅ Playwright browsers cached
+# ✅ Reports published to GitHub Pages
+# ============================================
+
+name: Playwright Manual Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select Environment'
+        required: true
+        default: 'qa'
+        type: choice
+        options:
+          - dev
+          - qa
+          - stage
+          - prod
+
+      browser:
+        description: 'Select Browser'
+        required: true
+        default: 'Google Chrome'
+        type: choice
+        options:
+          - Google Chrome
+          - Microsoft Edge
+          - Chromium
+          - Firefox
+          - WebKit
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  test:
+    name: 🧪 ${{ github.event.inputs.environment }} | ${{ github.event.inputs.browser }}
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment }}
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📚 Install dependencies
+        run: npm ci
+
+      # ✅ Cache Playwright browsers
+      - name: 🗄️ Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: 🎭 Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
+      - name: 🎭 Install Playwright dependencies (if cached)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
+
+      # ✅ Clean old results
+      - name: 🧹 Clean previous results
+        run: |
+          rm -rf allure-results playwright-report playwright-html-report test-results
+
+      - name: 🧪 Run Tests
+        run: |
+          npx playwright test \
+            --config=playwright.config.${{ github.event.inputs.environment }}.ts \
+            --project="${{ github.event.inputs.browser }}"
+        env:
+          CI: true
+
+      - name: 📊 Upload HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ github.event.inputs.environment }}
+          path: playwright-report/
+          retention-days: 30
+
+      - name: 📊 Upload Custom HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-html-report-${{ github.event.inputs.environment }}
+          path: playwright-html-report/
+          retention-days: 30
+
+      - name: 📊 Upload Allure Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results-${{ github.event.inputs.environment }}
+          path: allure-results/
+          retention-days: 30
+
+      - name: 📸 Upload Test Results (Screenshots/Videos)
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results-${{ github.event.inputs.environment }}
+          path: test-results/
+          retention-days: 7
+
+  # ============================================
+  # Publish Reports to GitHub Pages
+  # ============================================
+  publish-reports:
+    name: 📈 Publish Reports
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download Playwright Report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report-${{ github.event.inputs.environment }}
+          path: github-pages/${{ github.event.inputs.environment }}/playwright-report
+        continue-on-error: true
+
+      - name: 📥 Download HTML Report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-html-report-${{ github.event.inputs.environment }}
+          path: github-pages/${{ github.event.inputs.environment }}/playwright-html-report
+        continue-on-error: true
+
+      - name: 📥 Download Allure Results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-${{ github.event.inputs.environment }}
+          path: allure-results/${{ github.event.inputs.environment }}
+        continue-on-error: true
+
+      # ========== Generate Allure Report ==========
+      - name: 📦 Setup Java (for Allure)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 📊 Install Allure CLI
+        run: |
+          curl -o allure-2.24.0.tgz -Ls https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.24.0/allure-commandline-2.24.0.tgz
+          tar -zxvf allure-2.24.0.tgz
+          echo "ALLURE_PATH=$PWD/allure-2.24.0/bin/allure" >> $GITHUB_ENV
+
+      - name: 📊 Generate Allure Report
+        run: |
+          ENV="${{ github.event.inputs.environment }}"
+          echo "📂 Checking $ENV allure-results..."
+          ls -la allure-results/$ENV/ || echo "Directory not found"
+          if [ -d "allure-results/$ENV" ] && [ "$(ls -A allure-results/$ENV 2>/dev/null)" ]; then
+            $ALLURE_PATH generate allure-results/$ENV -o github-pages/$ENV/allure-report --clean
+            echo "✅ $ENV Allure report generated"
+            ls -la github-pages/$ENV/allure-report/
+          else
+            echo "⚠️ No $ENV allure results found"
+          fi
+
+      # ========== Create Index Page ==========
+      - name: 📝 Create Index Page
+        run: |
+          CURRENT_DATE=$(date '+%Y-%m-%d %H:%M:%S UTC')
+          ENV="${{ github.event.inputs.environment }}"
+          BROWSER="${{ github.event.inputs.browser }}"
+          cat > github-pages/index.html << EOF
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Playwright Manual Run - June2025PWFramework</title>
+            <style>
+              body { font-family: Arial, sans-serif; max-width: 900px; margin: 50px auto; padding: 20px; }
+              h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+              .info { background: #e8f4fc; padding: 15px; border-radius: 8px; margin: 20px 0; }
+              .env-section { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0; }
+              .env-section h3 { margin-top: 0; }
+              a { color: #3498db; text-decoration: none; display: inline-block; margin: 5px 10px 5px 0; padding: 8px 16px; background: #ecf0f1; border-radius: 4px; }
+              a:hover { background: #3498db; color: white; }
+              .dev { border-left: 4px solid #27ae60; }
+              .qa { border-left: 4px solid #f39c12; }
+              .stage { border-left: 4px solid #9b59b6; }
+              .prod { border-left: 4px solid #e74c3c; }
+              .timestamp { color: #7f8c8d; font-size: 0.9em; }
+            </style>
+          </head>
+          <body>
+            <h1>🎭 Playwright Manual Run Reports</h1>
+            <p class="timestamp">Last updated: ${CURRENT_DATE}</p>
+            
+            <div class="info">
+              <strong>🔹 Environment:</strong> ${ENV}<br>
+              <strong>🔹 Browser:</strong> ${BROWSER}
+            </div>
+
+            <div class="env-section ${ENV}">
+              <h3>📊 ${ENV^^} Environment Reports</h3>
+              <a href="./${ENV}/playwright-report/index.html">Playwright Report</a>
+              <a href="./${ENV}/playwright-html-report/index.html">HTML Report</a>
+              <a href="./${ENV}/allure-report/index.html">Allure Report</a>
+            </div>
+          </body>
+          </html>
+          EOF
+
+      # ========== Deploy to GitHub Pages ==========
+      - name: 🌐 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: github-pages
+          keep_files: true  # ✅ Keep existing reports from auto pipeline
+
+      # ========== Print Report URLs ==========
+      - name: 🔗 Report URLs
+        run: |
+          ENV="${{ github.event.inputs.environment }}"
+          BROWSER="${{ github.event.inputs.browser }}"
+          echo "============================================"
+          echo "📊 REPORTS PUBLISHED SUCCESSFULLY!"
+          echo "============================================"
+          echo ""
+          echo "🔹 Environment: $ENV"
+          echo "🔹 Browser: $BROWSER"
+          echo ""
+          echo "🏠 Main Dashboard:"
+          echo "   https://nitin1tester.github.io/playwrightAssignment/"
+          echo ""
+          echo "📊 ${ENV^^} Reports:"
+          echo "   Playwright: https://nitin1tester.github.io/playwrightAssignment/${ENV}/playwright-report/index.html"
+          echo "   HTML:       https://nitin1tester.github.io/playwrightAssignment/${ENV}/playwright-html-report/index.html"
+          echo "   Allure:     https://nitin1tester.github.io/playwrightAssignment/${ENV}/allure-report/index.html"
+          echo ""
+          echo "============================================"
