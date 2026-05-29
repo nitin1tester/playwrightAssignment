@@ -1,0 +1,1001 @@
+# ============================================
+# OPTION 1: FULLY AUTOMATED PIPELINE
+# ============================================
+# Flow: lint → dev → qa → stage → prod (automatic)
+# Trigger: Push to develop/main branches, cron schedule
+# Reports: Published to GitHub Pages
+# ✅ ESLint static code analysis
+# ✅ Playwright browsers cached for faster runs
+# ✅ Allure environment labels for separation
+# ✅ Slack notifications for test results
+# ✅ Email notifications (any domain)
+# ============================================
+#
+# Required Secrets for Notifications:
+# ------------------------------------
+# SLACK_WEBHOOK_URL    - Slack Incoming Webhook URL
+# MAIL_SERVER          - SMTP server (e.g., smtp.gmail.com, smtp.office365.com)
+# MAIL_PORT            - SMTP port (e.g., 587 for TLS, 465 for SSL)
+# MAIL_USERNAME        - SMTP username/email
+# MAIL_PASSWORD        - SMTP password or app password
+# MAIL_FROM            - Sender email address
+# NOTIFICATION_EMAILS  - Comma-separated recipient emails (any domain)
+# ============================================
+
+name: Playwright Auto Pipeline
+
+on:
+  # Scheduled runs (cron job)
+  #schedule:
+  #  - cron: '*/15 * * * *'  # Every 5 minutes (minimum effective ~5 min on GitHub)
+
+  # Manual trigger
+  workflow_dispatch:
+
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # ============================================
+  # Static Code Analysis (ESLint)
+  # ============================================
+  lint:
+    name: 🔍 ESLint Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📚 Install dependencies
+        run: npm ci
+
+      - name: 📁 Create ESLint report directory
+        run: mkdir -p eslint-report
+
+      - name: 🔍 Run ESLint
+        id: eslint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: 📊 Generate ESLint HTML Report
+        if: always()
+        run: npm run lint:report
+
+      - name: 📊 Upload ESLint Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eslint-report
+          path: eslint-report/
+          retention-days: 30
+
+      - name: ✅ ESLint Summary
+        if: always()
+        run: |
+          echo "============================================"
+          echo "📊 ESLint Analysis Complete"
+          echo "============================================"
+          if [ "${{ steps.eslint.outcome }}" == "failure" ]; then
+            echo "⚠️ ESLint found issues - check the HTML report"
+          else
+            echo "✅ No ESLint issues found"
+          fi
+          echo "HTML Report: eslint-report/index.html"
+          echo "============================================"
+
+  # ============================================
+  # DEV Environment Tests
+  # =============================================
+  dev-tests:
+    name: 🔧 DEV Tests
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📚 Install dependencies
+        run: npm ci
+
+      # ✅ Cache Playwright browsers
+      - name: 🗄️ Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: 🎭 Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
+      - name: 🎭 Install Playwright dependencies (if cached)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
+
+      # ✅ Clean old results
+      - name: 🧹 Clean previous results
+        run: |
+          rm -rf allure-results playwright-report playwright-html-report test-results
+
+      - name: 🧪 Run DEV tests
+        run: npx playwright test --grep "@sample" --config=playwright.config.dev.ts
+        env:
+          CI: true
+          ALLURE_ENVIRONMENT: DEV
+
+      # ✅ Add environment label to Allure results
+      - name: 🏷️ Add Allure environment info
+        if: always()
+        run: |
+          echo "Environment=DEV" > allure-results/environment.properties
+          echo "Browser=Google Chrome" >> allure-results/environment.properties
+          echo "Config=playwright.config.dev.ts" >> allure-results/environment.properties
+          # Add parent suite label to each result file
+          for file in allure-results/*-result.json; do
+            if [ -f "$file" ]; then
+              # Add DEV label to test names
+              sed -i 's/"name":"\([^"]*\)"/"name":"[DEV] \1"/g' "$file" 2>/dev/null || true
+            fi
+          done
+
+      - name: 📊 Upload HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-dev
+          path: playwright-report/
+          retention-days: 30
+
+      - name: 📊 Upload Custom HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-html-report-dev
+          path: playwright-html-report/
+          retention-days: 30
+
+      - name: 📊 Upload Allure Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results-dev
+          path: allure-results/
+          retention-days: 30
+
+      - name: 📸 Upload Test Results (Screenshots/Videos)
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results-dev
+          path: test-results/
+          retention-days: 7
+
+  # ============================================
+  # QA Environment Tests
+  # ============================================
+  qa-tests:
+    name: 🔍 QA Tests
+    runs-on: ubuntu-latest
+    needs: dev-tests
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📚 Install dependencies
+        run: npm ci
+
+      # ✅ Cache Playwright browsers
+      - name: 🗄️ Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: 🎭 Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
+      - name: 🎭 Install Playwright dependencies (if cached)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
+
+      # ✅ Clean old results
+      - name: 🧹 Clean previous results
+        run: |
+          rm -rf allure-results playwright-report playwright-html-report test-results
+
+      - name: 🧪 Run QA tests
+        run: npx playwright test --grep "@sample" --config=playwright.config.qa.ts
+        env:
+          CI: true
+          ALLURE_ENVIRONMENT: QA
+
+      # ✅ Add environment label to Allure results
+      - name: 🏷️ Add Allure environment info
+        if: always()
+        run: |
+          echo "Environment=QA" > allure-results/environment.properties
+          echo "Browser=Google Chrome" >> allure-results/environment.properties
+          echo "Config=playwright.config.qa.ts" >> allure-results/environment.properties
+          # Add parent suite label to each result file
+          for file in allure-results/*-result.json; do
+            if [ -f "$file" ]; then
+              sed -i 's/"name":"\([^"]*\)"/"name":"[QA] \1"/g' "$file" 2>/dev/null || true
+            fi
+          done
+
+      - name: 📊 Upload HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-qa
+          path: playwright-report/
+          retention-days: 30
+
+      - name: 📊 Upload Custom HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-html-report-qa
+          path: playwright-html-report/
+          retention-days: 30
+
+      - name: 📊 Upload Allure Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results-qa
+          path: allure-results/
+          retention-days: 30
+
+      - name: 📸 Upload Test Results (Screenshots/Videos)
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results-qa
+          path: test-results/
+          retention-days: 7
+
+  # ============================================
+  # STAGE Environment Tests
+  # ============================================
+  stage-tests:
+    name: 🎯 STAGE Tests
+    runs-on: ubuntu-latest
+    needs: qa-tests
+    environment:
+      name: stage
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📚 Install dependencies
+        run: npm ci
+
+      # ✅ Cache Playwright browsers
+      - name: 🗄️ Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: 🎭 Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
+      - name: 🎭 Install Playwright dependencies (if cached)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
+
+      # ✅ Clean old results
+      - name: 🧹 Clean previous results
+        run: |
+          rm -rf allure-results playwright-report playwright-html-report test-results
+
+      - name: 🧪 Run STAGE tests
+        run: npx playwright test --grep "@sample" --config=playwright.config.stage.ts
+        env:
+          CI: true
+          ALLURE_ENVIRONMENT: STAGE
+
+      # ✅ Add environment label to Allure results
+      - name: 🏷️ Add Allure environment info
+        if: always()
+        run: |
+          echo "Environment=STAGE" > allure-results/environment.properties
+          echo "Browser=Google Chrome" >> allure-results/environment.properties
+          echo "Config=playwright.config.stage.ts" >> allure-results/environment.properties
+          # Add parent suite label to each result file
+          for file in allure-results/*-result.json; do
+            if [ -f "$file" ]; then
+              sed -i 's/"name":"\([^"]*\)"/"name":"[STAGE] \1"/g' "$file" 2>/dev/null || true
+            fi
+          done
+
+      - name: 📊 Upload HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-stage
+          path: playwright-report/
+          retention-days: 30
+
+      - name: 📊 Upload Custom HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-html-report-stage
+          path: playwright-html-report/
+          retention-days: 30
+
+      - name: 📊 Upload Allure Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results-stage
+          path: allure-results/
+          retention-days: 30
+
+      - name: 📸 Upload Test Results (Screenshots/Videos)
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results-stage
+          path: test-results/
+          retention-days: 7
+
+  # ============================================
+  # PROD Environment Tests
+  # ============================================
+  prod-tests:
+    name: 🚀 PROD Tests
+    runs-on: ubuntu-latest
+    needs: stage-tests
+    environment:
+      name: prod
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📚 Install dependencies
+        run: npm ci
+
+      # ✅ Cache Playwright browsers
+      - name: 🗄️ Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: 🎭 Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
+      - name: 🎭 Install Playwright dependencies (if cached)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
+
+      # ✅ Clean old results
+      - name: 🧹 Clean previous results
+        run: |
+          rm -rf allure-results playwright-report playwright-html-report test-results
+
+      - name: 🧪 Run PROD tests
+        run: npx playwright test --grep "@sample" --config=playwright.config.prod.ts
+        env:
+          CI: true
+          ALLURE_ENVIRONMENT: PROD
+
+      # ✅ Add environment label to Allure results
+      - name: 🏷️ Add Allure environment info
+        if: always()
+        run: |
+          echo "Environment=PROD" > allure-results/environment.properties
+          echo "Browser=Google Chrome" >> allure-results/environment.properties
+          echo "Config=playwright.config.prod.ts" >> allure-results/environment.properties
+          # Add parent suite label to each result file
+          for file in allure-results/*-result.json; do
+            if [ -f "$file" ]; then
+              sed -i 's/"name":"\([^"]*\)"/"name":"[PROD] \1"/g' "$file" 2>/dev/null || true
+            fi
+          done
+
+      - name: 📊 Upload HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-prod
+          path: playwright-report/
+          retention-days: 30
+
+      - name: 📊 Upload Custom HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-html-report-prod
+          path: playwright-html-report/
+          retention-days: 30
+
+      - name: 📊 Upload Allure Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results-prod
+          path: allure-results/
+          retention-days: 30
+
+      - name: 📸 Upload Test Results (Screenshots/Videos)
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results-prod
+          path: test-results/
+          retention-days: 7
+
+  # ============================================
+  # Publish All Reports to GitHub Pages
+  # ============================================
+  publish-reports:
+    name: 📈 Publish Reports
+    runs-on: ubuntu-latest
+    needs: [dev-tests, qa-tests, stage-tests, prod-tests]
+    if: always()
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      # ========== Download ESLint Report ==========
+      - name: 📥 Download ESLint Report
+        uses: actions/download-artifact@v4
+        with:
+          name: eslint-report
+          path: github-pages/eslint-report
+        continue-on-error: true
+
+      # ========== Download All Artifacts ==========
+      - name: 📥 Download DEV Playwright Report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report-dev
+          path: github-pages/dev/playwright-report
+        continue-on-error: true
+
+      - name: 📥 Download DEV HTML Report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-html-report-dev
+          path: github-pages/dev/playwright-html-report
+        continue-on-error: true
+
+      - name: 📥 Download QA Playwright Report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report-qa
+          path: github-pages/qa/playwright-report
+        continue-on-error: true
+
+      - name: 📥 Download QA HTML Report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-html-report-qa
+          path: github-pages/qa/playwright-html-report
+        continue-on-error: true
+
+      - name: 📥 Download STAGE Playwright Report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report-stage
+          path: github-pages/stage/playwright-report
+        continue-on-error: true
+
+      - name: 📥 Download STAGE HTML Report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-html-report-stage
+          path: github-pages/stage/playwright-html-report
+        continue-on-error: true
+
+      - name: 📥 Download PROD Playwright Report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report-prod
+          path: github-pages/prod/playwright-report
+        continue-on-error: true
+
+      - name: 📥 Download PROD HTML Report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-html-report-prod
+          path: github-pages/prod/playwright-html-report
+        continue-on-error: true
+
+      # ========== Download Allure Results ==========
+      - name: 📥 Download DEV Allure Results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-dev
+          path: allure-results/dev
+        continue-on-error: true
+
+      - name: 📥 Download QA Allure Results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-qa
+          path: allure-results/qa
+        continue-on-error: true
+
+      - name: 📥 Download STAGE Allure Results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-stage
+          path: allure-results/stage
+        continue-on-error: true
+
+      - name: 📥 Download PROD Allure Results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-prod
+          path: allure-results/prod
+        continue-on-error: true
+
+      # ========== Generate Allure Reports PER ENVIRONMENT ==========
+      - name: 📦 Setup Java (for Allure)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 📊 Install Allure CLI
+        run: |
+          curl -o allure-2.24.0.tgz -Ls https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.24.0/allure-commandline-2.24.0.tgz
+          tar -zxvf allure-2.24.0.tgz
+          # Use absolute path instead of PATH
+          echo "ALLURE_PATH=$PWD/allure-2.24.0/bin/allure" >> $GITHUB_ENV
+          echo "✅ Allure installed at: $PWD/allure-2.24.0/bin/allure"
+
+      - name: 📊 Generate DEV Allure Report
+        run: |
+          echo "📂 Checking DEV allure-results..."
+          ls -la allure-results/dev/ || echo "Directory not found"
+          if [ -d "allure-results/dev" ] && [ "$(ls -A allure-results/dev 2>/dev/null)" ]; then
+            $ALLURE_PATH generate allure-results/dev -o github-pages/dev/allure-report --clean
+            echo "✅ DEV Allure report generated"
+            ls -la github-pages/dev/allure-report/
+          else
+            echo "⚠️ No DEV allure results found or directory empty"
+          fi
+
+      - name: 📊 Generate QA Allure Report
+        run: |
+          echo "📂 Checking QA allure-results..."
+          ls -la allure-results/qa/ || echo "Directory not found"
+          if [ -d "allure-results/qa" ] && [ "$(ls -A allure-results/qa 2>/dev/null)" ]; then
+            $ALLURE_PATH generate allure-results/qa -o github-pages/qa/allure-report --clean
+            echo "✅ QA Allure report generated"
+            ls -la github-pages/qa/allure-report/
+          else
+            echo "⚠️ No QA allure results found or directory empty"
+          fi
+
+      - name: 📊 Generate STAGE Allure Report
+        run: |
+          echo "📂 Checking STAGE allure-results..."
+          ls -la allure-results/stage/ || echo "Directory not found"
+          if [ -d "allure-results/stage" ] && [ "$(ls -A allure-results/stage 2>/dev/null)" ]; then
+            $ALLURE_PATH generate allure-results/stage -o github-pages/stage/allure-report --clean
+            echo "✅ STAGE Allure report generated"
+            ls -la github-pages/stage/allure-report/
+          else
+            echo "⚠️ No STAGE allure results found or directory empty"
+          fi
+
+      - name: 📊 Generate PROD Allure Report
+        run: |
+          echo "📂 Checking PROD allure-results..."
+          ls -la allure-results/prod/ || echo "Directory not found"
+          if [ -d "allure-results/prod" ] && [ "$(ls -A allure-results/prod 2>/dev/null)" ]; then
+            $ALLURE_PATH generate allure-results/prod -o github-pages/prod/allure-report --clean
+            echo "✅ PROD Allure report generated"
+            ls -la github-pages/prod/allure-report/
+          else
+            echo "⚠️ No PROD allure results found or directory empty"
+          fi
+
+      - name: 📂 Verify all reports before deploy
+        run: |
+          echo "📊 Final github-pages structure:"
+          find github-pages -type f -name "index.html" | head -20
+        continue-on-error: true
+
+      # ========== Create Index Page ==========
+      - name: 📝 Create Index Page
+        run: |
+          CURRENT_DATE=$(date '+%Y-%m-%d %H:%M:%S UTC')
+          cat > github-pages/index.html << EOF
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Playwright Test Reports - June2025PWFramework</title>
+            <style>
+              body { font-family: Arial, sans-serif; max-width: 900px; margin: 50px auto; padding: 20px; }
+              h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+              h2 { color: #34495e; margin-top: 30px; }
+              .env-section { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0; }
+              .env-section h3 { margin-top: 0; }
+              a { color: #3498db; text-decoration: none; display: inline-block; margin: 5px 10px 5px 0; padding: 8px 16px; background: #ecf0f1; border-radius: 4px; }
+              a:hover { background: #3498db; color: white; }
+              .dev { border-left: 4px solid #27ae60; }
+              .qa { border-left: 4px solid #f39c12; }
+              .stage { border-left: 4px solid #9b59b6; }
+              .prod { border-left: 4px solid #e74c3c; }
+              .timestamp { color: #7f8c8d; font-size: 0.9em; }
+            </style>
+          </head>
+          <body>
+            <h1>🎭 Playwright Test Reports</h1>
+            <p class="timestamp">Last updated: ${CURRENT_DATE}</p>
+
+            <div class="env-section" style="border-left: 4px solid #3498db;">
+              <h3>🔍 Static Code Analysis</h3>
+              <a href="./eslint-report/index.html">ESLint Report</a>
+            </div>
+
+            <div class="env-section dev">
+              <h3>🔧 DEV Environment</h3>
+              <a href="./dev/playwright-report/index.html">Playwright Report</a>
+              <a href="./dev/playwright-html-report/index.html">HTML Report</a>
+              <a href="./dev/allure-report/index.html">Allure Report</a>
+            </div>
+            
+            <div class="env-section qa">
+              <h3>🔍 QA Environment</h3>
+              <a href="./qa/playwright-report/index.html">Playwright Report</a>
+              <a href="./qa/playwright-html-report/index.html">HTML Report</a>
+              <a href="./qa/allure-report/index.html">Allure Report</a>
+            </div>
+            
+            <div class="env-section stage">
+              <h3>🎯 STAGE Environment</h3>
+              <a href="./stage/playwright-report/index.html">Playwright Report</a>
+              <a href="./stage/playwright-html-report/index.html">HTML Report</a>
+              <a href="./stage/allure-report/index.html">Allure Report</a>
+            </div>
+            
+            <div class="env-section prod">
+              <h3>🚀 PROD Environment</h3>
+              <a href="./prod/playwright-report/index.html">Playwright Report</a>
+              <a href="./prod/playwright-html-report/index.html">HTML Report</a>
+              <a href="./prod/allure-report/index.html">Allure Report</a>
+            </div>
+          </body>
+          </html>
+          EOF
+
+      # ========== Deploy to GitHub Pages ==========
+      - name: 🌐 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: github-pages
+
+      # ========== Print Report URLs ==========
+      - name: 🔗 Report URLs
+        run: |
+          echo "============================================"
+          echo "📊 REPORTS PUBLISHED SUCCESSFULLY!"
+          echo "============================================"
+          echo ""
+          echo "🏠 Main Dashboard:"
+          echo "   https://nitin1tester.github.io/playwrightAssignment/"
+          echo ""
+          echo "🔧 DEV Reports:"
+          echo "   Playwright: https://nitin1tester.github.io/playwrightAssignment/dev/playwright-report/index.html"
+          echo "   HTML:       https://nitin1tester.github.io/playwrightAssignment/dev/playwright-html-report/index.html"
+          echo "   Allure:     https://nitin1tester.github.io/playwrightAssignment/dev/allure-report/index.html"
+          echo ""
+          echo "🔍 QA Reports:"
+          echo "   Playwright: https://nitin1tester.github.io/playwrightAssignment/qa/playwright-report/index.html"
+          echo "   HTML:       https://nitin1tester.github.io/playwrightAssignment/qa/playwright-html-report/index.html"
+          echo "   Allure:     https://nitin1tester.github.io/playwrightAssignment/qa/allure-report/index.html"
+          echo ""
+          echo "🎯 STAGE Reports:"
+          echo "   Playwright: https://nitin1tester.github.io/playwrightAssignment/stage/playwright-report/index.html"
+          echo "   HTML:       https://nitin1tester.github.io/playwrightAssignment/stage/playwright-html-report/index.html"
+          echo "   Allure:     https://nitin1tester.github.io/playwrightAssignment/stage/allure-report/index.html"
+          echo ""
+          echo "🚀 PROD Reports:"
+          echo "   Playwright: https://nitin1tester.github.io/playwrightAssignment/prod/playwright-report/index.html"
+          echo "   HTML:       https://nitin1tester.github.io/playwrightAssignment/prod/playwright-html-report/index.html"
+          echo "   Allure:     https://nitin1tester.github.io/playwrightAssignment/prod/allure-report/index.html"
+          echo ""
+          echo "============================================"
+
+  # ============================================
+  # Slack & Email Notifications
+  # ============================================
+  notify:
+    name: 📬 Send Notifications
+    runs-on: ubuntu-latest
+    needs: [dev-tests, qa-tests, stage-tests, prod-tests, publish-reports]
+    if: always()
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      MAIL_SERVER: ${{ secrets.MAIL_SERVER }}
+      NOTIFICATION_EMAILS: ${{ secrets.NOTIFICATION_EMAILS }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      # ========== Determine Overall Status ==========
+      - name: 🔍 Determine Pipeline Status
+        id: status
+        run: |
+          # Check job results
+          DEV_RESULT="${{ needs.dev-tests.result }}"
+          QA_RESULT="${{ needs.qa-tests.result }}"
+          STAGE_RESULT="${{ needs.stage-tests.result }}"
+          PROD_RESULT="${{ needs.prod-tests.result }}"
+
+          echo "DEV: $DEV_RESULT"
+          echo "QA: $QA_RESULT"
+          echo "STAGE: $STAGE_RESULT"
+          echo "PROD: $PROD_RESULT"
+
+          # Determine overall status
+          if [[ "$DEV_RESULT" == "success" && "$QA_RESULT" == "success" && "$STAGE_RESULT" == "success" && "$PROD_RESULT" == "success" ]]; then
+            echo "overall_status=success" >> $GITHUB_OUTPUT
+            echo "status_emoji=✅" >> $GITHUB_OUTPUT
+            echo "status_color=#36a64f" >> $GITHUB_OUTPUT
+            echo "status_text=All Tests Passed" >> $GITHUB_OUTPUT
+          elif [[ "$DEV_RESULT" == "failure" || "$QA_RESULT" == "failure" || "$STAGE_RESULT" == "failure" || "$PROD_RESULT" == "failure" ]]; then
+            echo "overall_status=failure" >> $GITHUB_OUTPUT
+            echo "status_emoji=❌" >> $GITHUB_OUTPUT
+            echo "status_color=#dc3545" >> $GITHUB_OUTPUT
+            echo "status_text=Tests Failed" >> $GITHUB_OUTPUT
+          else
+            echo "overall_status=warning" >> $GITHUB_OUTPUT
+            echo "status_emoji=⚠️" >> $GITHUB_OUTPUT
+            echo "status_color=#ffc107" >> $GITHUB_OUTPUT
+            echo "status_text=Tests Partially Completed" >> $GITHUB_OUTPUT
+          fi
+
+          # Set individual status emojis
+          if [[ "$DEV_RESULT" == "success" ]]; then echo "dev_emoji=✅" >> $GITHUB_OUTPUT; else echo "dev_emoji=❌" >> $GITHUB_OUTPUT; fi
+          if [[ "$QA_RESULT" == "success" ]]; then echo "qa_emoji=✅" >> $GITHUB_OUTPUT; else echo "qa_emoji=❌" >> $GITHUB_OUTPUT; fi
+          if [[ "$STAGE_RESULT" == "success" ]]; then echo "stage_emoji=✅" >> $GITHUB_OUTPUT; else echo "stage_emoji=❌" >> $GITHUB_OUTPUT; fi
+          if [[ "$PROD_RESULT" == "success" ]]; then echo "prod_emoji=✅" >> $GITHUB_OUTPUT; else echo "prod_emoji=❌" >> $GITHUB_OUTPUT; fi
+
+      # ========== Slack Notification ==========
+      - name: 💬 Send Slack Notification
+        id: slack
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
+        continue-on-error: true
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "${{ steps.status.outputs.status_color }}",
+                  "blocks": [
+                    {
+                      "type": "header",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "${{ steps.status.outputs.status_emoji }} Playwright Pipeline: ${{ steps.status.outputs.status_text }}",
+                        "emoji": true
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Repository:*\n${{ github.repository }}"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Branch:*\n${{ github.ref_name }}"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Triggered by:*\n${{ github.actor }}"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Commit:*\n<${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Test Results by Environment:*\n${{ steps.status.outputs.dev_emoji }} DEV: ${{ needs.dev-tests.result }}\n${{ steps.status.outputs.qa_emoji }} QA: ${{ needs.qa-tests.result }}\n${{ steps.status.outputs.stage_emoji }} STAGE: ${{ needs.stage-tests.result }}\n${{ steps.status.outputs.prod_emoji }} PROD: ${{ needs.prod-tests.result }}"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*📊 View Reports:*\n<https://nitin1tester.github.io/playwrightAssignment/|Test Reports Dashboard>"
+                      }
+                    },
+                    {
+                      "type": "context",
+                      "elements": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "Workflow: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run #${{ github.run_number }}>"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      # ========== Email Notification ==========
+      - name: 📧 Send Email Notification
+        id: email
+        continue-on-error: true
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.MAIL_SERVER }}
+          server_port: ${{ secrets.MAIL_PORT }}
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "${{ steps.status.outputs.status_emoji }} Playwright Tests: ${{ steps.status.outputs.status_text }} - ${{ github.repository }}"
+          to: ${{ secrets.NOTIFICATION_EMAILS }}
+          from: ${{ secrets.MAIL_FROM }}
+          html_body: |
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { background: ${{ steps.status.outputs.status_color }}; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+                .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 8px 8px; }
+                .status-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+                .status-table th, .status-table td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+                .status-table th { background: #ecf0f1; }
+                .success { color: #27ae60; }
+                .failure { color: #e74c3c; }
+                .btn { display: inline-block; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px; margin: 5px; }
+                .btn:hover { background: #2980b9; }
+                .footer { text-align: center; margin-top: 20px; color: #7f8c8d; font-size: 12px; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  <h1>${{ steps.status.outputs.status_emoji }} Playwright Pipeline Results</h1>
+                  <h2>${{ steps.status.outputs.status_text }}</h2>
+                </div>
+                <div class="content">
+                  <h3>Pipeline Information</h3>
+                  <table class="status-table">
+                    <tr><th>Repository</th><td>${{ github.repository }}</td></tr>
+                    <tr><th>Branch</th><td>${{ github.ref_name }}</td></tr>
+                    <tr><th>Triggered by</th><td>${{ github.actor }}</td></tr>
+                    <tr><th>Commit</th><td><a href="${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}">${{ github.sha }}</a></td></tr>
+                    <tr><th>Run Number</th><td>#${{ github.run_number }}</td></tr>
+                  </table>
+
+                  <h3>Test Results by Environment</h3>
+                  <table class="status-table">
+                    <tr>
+                      <th>Environment</th>
+                      <th>Status</th>
+                    </tr>
+                    <tr>
+                      <td>🔧 DEV</td>
+                      <td class="${{ needs.dev-tests.result == 'success' && 'success' || 'failure' }}">${{ needs.dev-tests.result }}</td>
+                    </tr>
+                    <tr>
+                      <td>🔍 QA</td>
+                      <td class="${{ needs.qa-tests.result == 'success' && 'success' || 'failure' }}">${{ needs.qa-tests.result }}</td>
+                    </tr>
+                    <tr>
+                      <td>🎯 STAGE</td>
+                      <td class="${{ needs.stage-tests.result == 'success' && 'success' || 'failure' }}">${{ needs.stage-tests.result }}</td>
+                    </tr>
+                    <tr>
+                      <td>🚀 PROD</td>
+                      <td class="${{ needs.prod-tests.result == 'success' && 'success' || 'failure' }}">${{ needs.prod-tests.result }}</td>
+                    </tr>
+                  </table>
+
+                  <h3>📊 View Reports</h3>
+                  <p>
+                    <a href="https://nitin1tester.github.io/playwrightAssignment/" class="btn">📊 Reports Dashboard</a>
+                    <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" class="btn">🔗 View Workflow Run</a>
+                  </p>
+
+                  <h4>Individual Environment Reports:</h4>
+                  <ul>
+                    <li><strong>DEV:</strong> <a href="https://nitin1tester.github.io/playwrightAssignment/dev/allure-report/">Allure</a> | <a href="https://nitin1tester.github.io/playwrightAssignment/dev/playwright-report/">Playwright</a></li>
+                    <li><strong>QA:</strong> <a href="https://nitin1tester.github.io/playwrightAssignment/qa/allure-report/">Allure</a> | <a href="https://nitin1tester.github.io/playwrightAssignment/qa/playwright-report/">Playwright</a></li>
+                    <li><strong>STAGE:</strong> <a href="https://nitin1tester.github.io/playwrightAssignment/stage/allure-report/">Allure</a> | <a href="https://nitin1tester.github.io/playwrightAssignment/stage/playwright-report/">Playwright</a></li>
+                    <li><strong>PROD:</strong> <a href="https://nitin1tester.github.io/playwrightAssignment/prod/allure-report/">Allure</a> | <a href="https://nitin1tester.github.io/playwrightAssignment/prod/playwright-report/">Playwright</a></li>
+                  </ul>
+                </div>
+                <div class="footer">
+                  <p>This is an automated notification from GitHub Actions.</p>
+                  <p>Repository: ${{ github.repository }} | Run #${{ github.run_number }}</p>
+                </div>
+              </div>
+            </body>
+            </html>
+
+      - name: ✅ Notifications Summary
+        run: |
+          echo "============================================"
+          echo "📬 NOTIFICATION STATUS"
+          echo "============================================"
+          echo ""
+          echo "Pipeline Status: ${{ steps.status.outputs.status_text }}"
+          echo ""
+          echo "Slack: ${{ steps.slack.outcome == 'success' && '✅ Sent' || (steps.slack.outcome == 'skipped' && '⏭️ Skipped' || '❌ Failed') }}"
+          echo "Email: ${{ steps.email.outcome == 'success' && '✅ Sent' || '❌ Failed - Check logs above' }}"
+          echo ""
+          echo "============================================"
