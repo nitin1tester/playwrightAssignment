@@ -107,7 +107,7 @@ pipeline {
                 echo '============================================'
                 echo '🎭 Installing Playwright browsers...'
                 echo '============================================'
-                sh 'npx playwright install --with-deps chromium'
+                sh 'npx playwright install --with-deps'
 
                 echo '============================================'
                 echo '🧹 Cleaning previous results...'
