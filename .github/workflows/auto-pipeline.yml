@@ -140,7 +140,7 @@ jobs:
           rm -rf allure-results playwright-report playwright-html-report test-results
 
       - name: 🧪 Run DEV tests
-        run: npx playwright test --grep "@sample" --config=playwright.config.dev.ts
+        run: nxvfb-run npx playwright test --config=playwright.config.dev.ts
         env:
           CI: true
           ALLURE_ENVIRONMENT: DEV
@@ -149,7 +149,6 @@ jobs:
       - name: 🏷️ Add Allure environment info
         if: always()
         run: |
-          mkdir -p allure-results
           echo "Environment=DEV" > allure-results/environment.properties
           echo "Browser=Google Chrome" >> allure-results/environment.properties
           echo "Config=playwright.config.dev.ts" >> allure-results/environment.properties
@@ -238,7 +237,7 @@ jobs:
           rm -rf allure-results playwright-report playwright-html-report test-results
 
       - name: 🧪 Run QA tests
-        run: npx playwright test --grep "@sample" --config=playwright.config.qa.ts
+        run: xvfb-run npx playwright test --config=playwright.config.qa.ts
         env:
           CI: true
           ALLURE_ENVIRONMENT: QA
@@ -247,7 +246,6 @@ jobs:
       - name: 🏷️ Add Allure environment info
         if: always()
         run: |
-          mkdir -p allure-results
           echo "Environment=QA" > allure-results/environment.properties
           echo "Browser=Google Chrome" >> allure-results/environment.properties
           echo "Config=playwright.config.qa.ts" >> allure-results/environment.properties
@@ -337,7 +335,7 @@ jobs:
           rm -rf allure-results playwright-report playwright-html-report test-results
 
       - name: 🧪 Run STAGE tests
-        run: npx playwright test --grep "@sample" --config=playwright.config.stage.ts
+        run: xvfb-run npx playwright test --config=playwright.config.stage.ts
         env:
           CI: true
           ALLURE_ENVIRONMENT: STAGE
@@ -346,7 +344,6 @@ jobs:
       - name: 🏷️ Add Allure environment info
         if: always()
         run: |
-          mkdir -p allure-results
           echo "Environment=STAGE" > allure-results/environment.properties
           echo "Browser=Google Chrome" >> allure-results/environment.properties
           echo "Config=playwright.config.stage.ts" >> allure-results/environment.properties
@@ -436,7 +433,7 @@ jobs:
           rm -rf allure-results playwright-report playwright-html-report test-results
 
       - name: 🧪 Run PROD tests
-        run: npx playwright test --grep "@sample" --config=playwright.config.prod.ts
+        run: xvfb-run npx playwright test --config=playwright.config.prod.ts
         env:
           CI: true
           ALLURE_ENVIRONMENT: PROD
@@ -445,7 +442,6 @@ jobs:
       - name: 🏷️ Add Allure environment info
         if: always()
         run: |
-          mkdir -p allure-results
           echo "Environment=PROD" > allure-results/environment.properties
           echo "Browser=Google Chrome" >> allure-results/environment.properties
           echo "Config=playwright.config.prod.ts" >> allure-results/environment.properties
