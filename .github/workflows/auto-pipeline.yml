@@ -140,7 +140,7 @@ jobs:
           rm -rf allure-results playwright-report playwright-html-report test-results
 
       - name: 🧪 Run DEV tests
-        run: nxvfb-run npx playwright test --config=playwright.config.dev.ts
+        run: xvfb-run npx playwright test --config=playwright.config.dev.ts
         env:
           CI: true
           ALLURE_ENVIRONMENT: DEV
