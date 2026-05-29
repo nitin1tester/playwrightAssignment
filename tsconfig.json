@@ -18,6 +18,7 @@
     "playwright.config.prod.ts",
     "playwright.config.stage.ts",
     "playwright.config.dev.ts",
-    "playwright.config.qa.ts"
+    "playwright.config.qa.ts",
+    "playwright.docker.config.ts"
   ]
 }
