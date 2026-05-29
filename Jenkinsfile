@@ -119,7 +119,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.DEV_TEST_STATUS = sh(
-                        script: 'npx playwright test" --config=playwright.config.dev.ts',
+                        script: 'npx playwright test --config=playwright.config.dev.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -195,7 +195,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.QA_TEST_STATUS = sh(
-                        script: 'npx playwright test" --config=playwright.config.qa.ts',
+                        script: 'npx playwright test --config=playwright.config.qa.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -271,7 +271,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.STAGE_TEST_STATUS = sh(
-                        script: 'npx playwright test" --config=playwright.config.stage.ts',
+                        script: 'npx playwright test --config=playwright.config.stage.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
@@ -347,7 +347,7 @@ pipeline {
                 echo '============================================'
                 script {
                     env.PROD_TEST_STATUS = sh(
-                        script: 'npx playwright test" --config=playwright.config.prod.ts',
+                        script: 'npx playwright test --config=playwright.config.prod.ts',
                         returnStatus: true
                     ) == 0 ? 'success' : 'failure'
                 }
