@@ -7,13 +7,13 @@ class ElementError extends Error{
     constructor(messsage:string){
         super(messsage);        // call super class constuctor 
     }
-};
+}
 
 class BrowserError extends Error{
     constructor(message : string){
         super(message);
     }
-};
+}
 
 class FrameworkError extends Error{
     constructor(message : string){
@@ -23,7 +23,7 @@ class FrameworkError extends Error{
 
 class NoDataFoundError extends Error{
     constructor(message : string){
-        super(message)
+        super(message);
     }
 } 
 export{ ElementError, BrowserError, FrameworkError, NoDataFoundError};

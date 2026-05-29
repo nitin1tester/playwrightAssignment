@@ -1,6 +1,6 @@
-import { Page, Locator, errors } from "@playwright/test";
+import { Page, Locator } from '@playwright/test';
 import { ElementUtil } from '../../utils/ElementUtil';
-import {InventoryPage} from './InventoryPage'
+import {InventoryPage} from './InventoryPage';
 
 /**
  * Every page class need 3 thing 
@@ -33,7 +33,7 @@ export class LoginPage {
      * nagigate to Login Page
      */
     async goToLoginPage(baseURL : string|undefined) {
-        await this.page.goto(baseURL+"");
+        await this.page.goto(baseURL+'');
     }
 
     /**
@@ -51,9 +51,9 @@ export class LoginPage {
      * 
      * @returns String or null
      */
-    async getInvalidLoginMessage(): Promise<String | null> {
+    async getInvalidLoginMessage(): Promise<string | null> {
         const errorMsg = await this.eleUtil.getText(this.warningMsg);
-        console.log("Invlid login warning message: " + errorMsg);
+        console.log('Invlid login warning message: ' + errorMsg);
         return errorMsg;
     }
 

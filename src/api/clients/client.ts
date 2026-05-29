@@ -1,5 +1,5 @@
 import { expect, APIRequestContext, APIResponse } from '@playwright/test';
-import { AUTH_PAYLOAD, BOOKING_PAYLOAD } from "../../../src/api/data/data";
+import { AUTH_PAYLOAD, BOOKING_PAYLOAD } from '../../../src/api/data/data';
 import { LoggerHelper } from '../../utils/logger';
 
 const BASE_URL = 'https://restful-booker.herokuapp.com';
@@ -36,7 +36,7 @@ class RestfulBookerClient {
     return body.token;
   }
 
-  async createBooking(payload = BOOKING_PAYLOAD): Promise<any> {
+  async createBooking(payload = BOOKING_PAYLOAD): Promise<unknown> {
     logger.info({
       endpoint: '/booking',
       payload
@@ -76,7 +76,7 @@ class RestfulBookerClient {
   async updateBooking(
     bookingId: number,
     token: string,
-    payload: any
+    payload: unknown
   ): Promise<APIResponse> {
     logger.info({
       bookingId,

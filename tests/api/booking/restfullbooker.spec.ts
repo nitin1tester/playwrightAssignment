@@ -1,6 +1,6 @@
-import { test, expect, APIRequestContext, APIResponse } from '@playwright/test';
-import { RestfulBookerClient,BASE_URL } from "../../../src/api/clients/client";
-import { BOOKING_PAYLOAD,INVALID_AUTH_PAYLOAD } from "../../../src/api/data/data";
+import { test, expect} from '@playwright/test';
+import { RestfulBookerClient,BASE_URL } from '../../../src/api/clients/client';
+import { BOOKING_PAYLOAD,INVALID_AUTH_PAYLOAD } from '../../../src/api/data/data';
 
 // =====================================================
 // TEST SUITE

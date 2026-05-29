@@ -1,7 +1,6 @@
-import { Page, Locator, errors } from "@playwright/test";
+import { Page, Locator } from '@playwright/test';
 import { ElementUtil } from '../../utils/ElementUtil';
-import {InventoryPage} from './InventoryPage'
-import {  CheckoutUserInfoPage} from "./CheckoutUserInfoPage";
+import {InventoryPage} from './InventoryPage';
 
 /**
  * Every page class need 3 thing 
@@ -36,8 +35,8 @@ export class CheckoutCompletePage {
     }
 
     async isOrderConfirmationMsgVisible():Promise<boolean>{
-        let isOrderConfirmedFlag:boolean = await this.eleUtil.isVisible(this.orderConfirmationMsg);
-        console.log("is order confirmed : " + isOrderConfirmedFlag);
+        const isOrderConfirmedFlag:boolean = await this.eleUtil.isVisible(this.orderConfirmationMsg);
+        console.log('is order confirmed : ' + isOrderConfirmedFlag);
         return isOrderConfirmedFlag;
     }
 

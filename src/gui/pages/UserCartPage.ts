@@ -1,7 +1,6 @@
-import { Page, Locator, errors } from "@playwright/test";
+import { Page, Locator } from '@playwright/test';
 import { ElementUtil } from '../../utils/ElementUtil';
-import {InventoryPage} from './InventoryPage'
-import {  CheckoutUserInfoPage} from "./CheckoutUserInfoPage";
+import {  CheckoutUserInfoPage} from './CheckoutUserInfoPage';
 
 /**
  * Every page class need 3 thing 

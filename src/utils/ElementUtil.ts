@@ -1,5 +1,5 @@
 import { Page, Locator } from '@playwright/test';
-import { LoggerHelper} from '../utils/logger'
+import { LoggerHelper} from '../utils/logger';
 
 type flexibleLocator = string | Locator;
 
@@ -90,7 +90,7 @@ export class ElementUtil{
     async fill(locator: flexibleLocator, text: string): Promise<void>{
         await this.getLocator(locator).fill(text, { timeout: this.defaultTimeOut });
         console.log(`Filled text : ${text} into element : ${locator}`);
-        LoggerHelper.debug(`Filled text : ${text} into element : ${locator}`)
+        LoggerHelper.debug(`Filled text : ${text} into element : ${locator}`);
 
     }
 
@@ -225,7 +225,7 @@ export class ElementUtil{
         try {
             await this.getLocator(locator).waitFor({ state: 'attached', timeout });
             console.log('waited for element to be visible ');
-            LoggerHelper.debug('waited for element to be visible ')
+            LoggerHelper.debug('waited for element to be visible ');
             return true;
         }
         catch {

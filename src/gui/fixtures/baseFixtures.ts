@@ -1,6 +1,6 @@
-import { test as base, expect } from "@playwright/test";
-import { InventoryPage } from "../pages/InventoryPage";
-import { LoginPage } from "../pages/LoginPage";
+import { test as base, expect } from '@playwright/test';
+import { InventoryPage } from '../pages/InventoryPage';
+import { LoginPage } from '../pages/LoginPage';
 
 type MyFixture = {
     inventoryPage : InventoryPage;
@@ -20,4 +20,4 @@ export const test =  base.extend<MyFixture>({
     }
 });
 
-export{expect}
+export{expect};

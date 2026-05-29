@@ -1,6 +1,7 @@
-import { Page, Locator } from "@playwright/test";
+/* eslint-disable quotes */
+import { Page, Locator } from '@playwright/test';
  import { ElementUtil } from '../../utils/ElementUtil';
-import { UserCartPage } from "./UserCartPage";
+import { UserCartPage } from './UserCartPage';
 
 
 /**
@@ -32,7 +33,7 @@ export class InventoryPage {
     //2. Page construcator
     constructor(page: Page) {
         this.page = page;
-        this.eleUtil = new ElementUtil(page)
+        this.eleUtil = new ElementUtil(page);
         this.hamburgerBtn = page.getByRole('button', { name: 'Open Menu' });
         this.logoutBtn = page.getByRole('link', { name: 'Logout' });
         this.leftMenuCancelBtn = page.getByRole('button', { name: 'Close Menu' });
@@ -68,7 +69,7 @@ export class InventoryPage {
     }
 
     async isCartBadgeVisible():Promise<boolean>{
-        let flag = await this.eleUtil.isVisible(this.shoppingCartBadge);
+        const flag = await this.eleUtil.isVisible(this.shoppingCartBadge);
         console.log('is Cart Badge visible '+ flag);
         return true;
     }
@@ -92,7 +93,7 @@ export class InventoryPage {
     }
 
     async isItemNotFoundlabelVisible():Promise<boolean>{
-        let flag = await this.eleUtil.isVisible(this.itemNotFoundLabel);
+        const flag = await this.eleUtil.isVisible(this.itemNotFoundLabel);
         console.log("is Item not visible label found : " + flag);
         return flag;
     }

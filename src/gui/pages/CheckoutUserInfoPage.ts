@@ -1,6 +1,6 @@
-import { Page, Locator, errors } from "@playwright/test";
+import { Page, Locator } from '@playwright/test';
 import { ElementUtil } from '../../utils/ElementUtil';
-import { CheckoutOverviewPage } from "./CheckoutOverviewPage";
+import { CheckoutOverviewPage } from './CheckoutOverviewPage';
 
 /**
  * Every page class need 3 thing 
@@ -36,17 +36,17 @@ export class CheckoutUserInfoPage {
 
     async fillFirstName(firstName: string): Promise<void> {
         await this.eleUtil.fill(this.fNameTextbox, firstName);
-        console.log("Filled First Name " + firstName);
+        console.log('Filled First Name ' + firstName);
     }
 
     async fillLastName(lastName: string): Promise<void> {
         await this.eleUtil.fill(this.lNameTextbox, lastName);
-        console.log("Filled Last Name " + lastName);
+        console.log('Filled Last Name ' + lastName);
     }
 
     async fillZipCode(zip: string): Promise<void> {
         await this.eleUtil.fill(this.zipTextbox, zip);
-        console.log("Filled Zip Code " + zip);
+        console.log('Filled Zip Code ' + zip);
     }
 
     async clickContinueBtn(): Promise<CheckoutOverviewPage> {
@@ -55,8 +55,8 @@ export class CheckoutUserInfoPage {
     }
 
     async getFirstNameError(): Promise<string|null>{
-        let text:string|null = await this.eleUtil.getText(this.errorFirstnameBlank);
-        console.log("Got text from error message : "+text);
+        const text:string|null = await this.eleUtil.getText(this.errorFirstnameBlank);
+        console.log('Got text from error message : '+text);
         return text;
     }
 
