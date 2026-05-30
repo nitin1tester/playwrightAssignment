@@ -29,7 +29,10 @@ module.exports = {
     'allure-results/',
     'test-results/',
     'playwright-html-report/',
+    'playwright-html-report-docker/',
     '*.config.*.ts',
     'playwright.config.ts',
+    'logs/',
+    'test-results/'
   ],
 };
