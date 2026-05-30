@@ -1,0 +1,13 @@
+export{CheckoutCompletePage} from '../PWSwagLabsUIFramework/src/gui/pages/CheckoutCompletePage';
+export{CheckoutOverviewPage} from '../PWSwagLabsUIFramework/src/gui/pages/CheckoutOverviewPage';
+export{CheckoutUserInfoPage} from '../PWSwagLabsUIFramework/src/gui/pages/CheckoutUserInfoPage';
+export{InventoryPage} from '../PWSwagLabsUIFramework/src/gui/pages/InventoryPage';
+export{LoginPage} from '../PWSwagLabsUIFramework/src/gui/pages/LoginPage';
+export{UserCartPage} from '../PWSwagLabsUIFramework/src/gui/pages/UserCartPage'; 
+export{BASE_URL,RestfulBookerClient,logger} from '../PWSwagLabsUIFramework/src/api/clients/client';
+export{AUTH_PAYLOAD,BOOKING_PAYLOAD,INVALID_AUTH_PAYLOAD} from '../PWSwagLabsUIFramework/src/api/data/data';
+export{ElementUtil} from '../PWSwagLabsUIFramework/src/utils/ElementUtil';
+export{LoggerHelper} from '../PWSwagLabsUIFramework/src/utils/logger';
+export{test,expect} from '../PWSwagLabsUIFramework/src/gui/fixtures/baseFixtures';
+export{dataTest} from '../PWSwagLabsUIFramework/src/gui/fixtures/dataFixture';
+export{BrowserError,ElementError,FrameworkError} from '../PWSwagLabsUIFramework/src/gui/error/custom-error';

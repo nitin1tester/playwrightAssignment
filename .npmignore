@@ -1,0 +1,17 @@
+tests/
+data/
+.github/
+node_modules/
+playwright-report/
+test-results/
+allure-results/
+allure-report/
+estint-report/
+playwright.config*.ts
+tsconfig.json
+eslintrc.cjs
+Jenkinsfile
+.env*
+.gitignore
+**/*.spec.ts
+**/*.test.ts

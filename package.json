@@ -1,9 +1,11 @@
 {
-  "name": "pwswaglabsuiframework",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "@nitin1tester/pwswaglabsuiframework",
+  "version": "1.0.1",
+  "description": "playwright test framework",
+  "main": "dist/index.js",
+  "type": "dist/index.d.ts",
   "scripts": {
+    "build": "tsc",
     "test": "npx playwright test",
     "test:smoke": "playwright test --grep @smoke",
     "test:regression": "playwright test --grep @regression",
@@ -18,12 +20,23 @@
     "lint:report": "eslint . --ext .ts,.js -f html -o eslint-report/index.html || true",
     "lint:report:json": "eslint . --ext .ts,.js -f json -o eslint-report/eslint-results.json || true",
     "allure:generate": "npx allure generate allure-results --clean -o allure-report",
-    "allure:open": "npx allure open allure-report"
+    "allure:open": "npx allure open allure-report",
+    "prepublishOnly": "npm run build",
+    "publish:nexus": "npm publish --registry=http://localhost:8081/repository/npm-private/"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
+  "keywords": [
+    "playwright",
+    "automation",
+    "framwork"
+  ],
+  "author": "Nitin R",
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "http://localhost:8081/repository/npm-private/"
+  },
+  "peerDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.1",
