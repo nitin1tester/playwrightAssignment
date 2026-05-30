@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Playwright Test Reports - June2025PWFramework</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 50px auto; padding: 20px; }
+    h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+    h2 { color: #34495e; margin-top: 30px; }
+    .env-section { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0; }
+    .env-section h3 { margin-top: 0; }
+    a { color: #3498db; text-decoration: none; display: inline-block; margin: 5px 10px 5px 0; padding: 8px 16px; background: #ecf0f1; border-radius: 4px; }
+    a:hover { background: #3498db; color: white; }
+    .dev { border-left: 4px solid #27ae60; }
+    .qa { border-left: 4px solid #f39c12; }
+    .stage { border-left: 4px solid #9b59b6; }
+    .prod { border-left: 4px solid #e74c3c; }
+    .timestamp { color: #7f8c8d; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <h1>🎭 Playwright Test Reports</h1>
+  <p class="timestamp">Last updated: 2026-05-30 02:06:15 UTC</p>
+
+  <div class="env-section" style="border-left: 4px solid #3498db;">
+    <h3>🔍 Static Code Analysis</h3>
+    <a href="./eslint-report/index.html">ESLint Report</a>
+  </div>
+
+  <div class="env-section dev">
+    <h3>🔧 DEV Environment</h3>
+    <a href="./dev/playwright-report/index.html">Playwright Report</a>
+    <a href="./dev/playwright-html-report/index.html">HTML Report</a>
+    <a href="./dev/allure-report/index.html">Allure Report</a>
+  </div>
+  
+  <div class="env-section qa">
+    <h3>🔍 QA Environment</h3>
+    <a href="./qa/playwright-report/index.html">Playwright Report</a>
+    <a href="./qa/playwright-html-report/index.html">HTML Report</a>
+    <a href="./qa/allure-report/index.html">Allure Report</a>
+  </div>
+  
+  <div class="env-section stage">
+    <h3>🎯 STAGE Environment</h3>
+    <a href="./stage/playwright-report/index.html">Playwright Report</a>
+    <a href="./stage/playwright-html-report/index.html">HTML Report</a>
+    <a href="./stage/allure-report/index.html">Allure Report</a>
+  </div>
+  
+  <div class="env-section prod">
+    <h3>🚀 PROD Environment</h3>
+    <a href="./prod/playwright-report/index.html">Playwright Report</a>
+    <a href="./prod/playwright-html-report/index.html">HTML Report</a>
+    <a href="./prod/allure-report/index.html">Allure Report</a>
+  </div>
+</body>
+</html>

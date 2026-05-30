@@ -1,0 +1,36 @@
+Filled text : standard_user into element : getByRole('textbox', { name: 'Username' })
+{"level":"DEBUG","time":"2026-05-30T01:54:58.225Z","pid":7046,"environment":"development","msg":"Filled text : standard_user into element : getByRole('textbox', { name: 'Username' })"}
+Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })
+{"level":"DEBUG","time":"2026-05-30T01:54:58.240Z","pid":7046,"environment":"development","msg":"Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })"}
+Clicked on element : getByRole('button', { name: 'Login' })
+{"level":"DEBUG","time":"2026-05-30T01:54:58.295Z","pid":7046,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Login' })"}
+Clicked on element : getByRole('button', { name: 'Open Menu' })
+{"level":"DEBUG","time":"2026-05-30T01:54:58.340Z","pid":7046,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Open Menu' })"}
+is logout button visible -: false
+┌───────────┬──────────┐
+│ (index)   │ Values   │
+├───────────┼──────────┤
+│ firstName │ 'Neha'   │
+│ lastName  │ 'Gupta'  │
+│ zipCode   │ '700091' │
+└───────────┴──────────┘
+this is product list => Sauce Labs Backpack,Sauce Labs Bike Light,Sauce Labs Bolt T-Shirt,Sauce Labs Fleece Jacket,Sauce Labs Onesie,Test.allTheThings() T-Shirt (Red)
+is Cart Badge visible true
+Clicked on element : locator('[data-test="shopping-cart-link"]')
+{"level":"DEBUG","time":"2026-05-30T01:54:58.469Z","pid":7046,"environment":"development","msg":"Clicked on element : locator('[data-test=\"shopping-cart-link\"]')"}
+Clicked on element : getByRole('button', { name: 'Checkout' })
+{"level":"DEBUG","time":"2026-05-30T01:54:58.488Z","pid":7046,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Checkout' })"}
+Filled text : Neha into element : getByRole('textbox', { name: 'First Name' })
+{"level":"DEBUG","time":"2026-05-30T01:54:58.516Z","pid":7046,"environment":"development","msg":"Filled text : Neha into element : getByRole('textbox', { name: 'First Name' })"}
+Filled First Name Neha
+Filled text : Gupta into element : getByRole('textbox', { name: 'Last Name' })
+{"level":"DEBUG","time":"2026-05-30T01:54:58.530Z","pid":7046,"environment":"development","msg":"Filled text : Gupta into element : getByRole('textbox', { name: 'Last Name' })"}
+Filled Last Name Gupta
+Filled text : 700091 into element : getByRole('textbox', { name: 'Zip/Postal Code' })
+{"level":"DEBUG","time":"2026-05-30T01:54:58.541Z","pid":7046,"environment":"development","msg":"Filled text : 700091 into element : getByRole('textbox', { name: 'Zip/Postal Code' })"}
+Filled Zip Code 700091
+Clicked on element : getByRole('button', { name: 'Continue' })
+{"level":"DEBUG","time":"2026-05-30T01:54:58.565Z","pid":7046,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Continue' })"}
+Clicked on element : getByRole('button', { name: 'Finish' })
+{"level":"DEBUG","time":"2026-05-30T01:54:58.596Z","pid":7046,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Finish' })"}
+is order confirmed : true
