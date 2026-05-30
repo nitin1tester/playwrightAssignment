@@ -33,6 +33,7 @@ module.exports = {
     '*.config.*.ts',
     'playwright.config.ts',
     'logs/',
-    'test-results/'
+    'test-results/',
+    'eslint-report'
   ],
 };
