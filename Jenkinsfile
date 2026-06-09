@@ -27,7 +27,10 @@
 
 pipeline {
     agent any
-
+    triggers {
+        // Runs once every day at 9 AM
+        cron('H 9 * * *') 
+    }
     tools {
         nodejs 'NodeJS-24'
     }
