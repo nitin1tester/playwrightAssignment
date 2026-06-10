@@ -25,10 +25,9 @@
 name: Playwright Auto Pipeline
 
 on:
-  # Scheduled runs (cron job)
-  #schedule:
-  #  - cron: '*/15 * * * *'  # Every 5 minutes (minimum effective ~5 min on GitHub)
-
+  # Scheduled runs (cron job) run at 10 AM as IST
+  schedule:
+    - cron: '30 4 * * *' 
   # Manual trigger
   workflow_dispatch:
 
