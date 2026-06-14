@@ -1,0 +1,11 @@
+Filled text : standard_user into element : getByRole('textbox', { name: 'Username' })
+{"level":"DEBUG","time":"2026-06-14T05:37:03.180Z","pid":5084,"environment":"development","msg":"Filled text : standard_user into element : getByRole('textbox', { name: 'Username' })"}
+Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })
+{"level":"DEBUG","time":"2026-06-14T05:37:03.200Z","pid":5084,"environment":"development","msg":"Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })"}
+Clicked on element : getByRole('button', { name: 'Login' })
+{"level":"DEBUG","time":"2026-06-14T05:37:03.262Z","pid":5084,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Login' })"}
+Clicked on element : getByRole('button', { name: 'Open Menu' })
+{"level":"DEBUG","time":"2026-06-14T05:37:03.322Z","pid":5084,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Open Menu' })"}
+is logout button visible -: true
+this is product list => Sauce Labs Backpack,Sauce Labs Bike Light,Sauce Labs Bolt T-Shirt,Sauce Labs Fleece Jacket,Sauce Labs Onesie,Test.allTheThings() T-Shirt (Red)
+is Cart Badge visible true

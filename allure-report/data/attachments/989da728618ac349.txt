@@ -1,6 +1,0 @@
-{"level":"INFO","time":"2026-05-20T16:08:22.445Z","pid":31424,"environment":"development","endpoint":"/auth","payload":{"username":"admin","password":"password123"},"msg":"Creating authentication token"}
-{"level":"INFO","time":"2026-05-20T16:08:22.795Z","pid":31424,"environment":"development","status":200,"response":{"token":"db068a4c0427aba"},"msg":"Authentication response received"}
-{"level":"INFO","time":"2026-05-20T16:08:22.841Z","pid":31424,"environment":"development","endpoint":"/booking","payload":{"firstname":"Delete","lastname":"Test","totalprice":700,"depositpaid":true,"bookingdates":{"checkin":"2025-07-01","checkout":"2025-07-03"},"additionalneeds":"Dinner"},"msg":"Creating booking"}
-{"level":"INFO","time":"2026-05-20T16:08:23.117Z","pid":31424,"environment":"development","status":200,"response":{"bookingid":3476,"booking":{"firstname":"Delete","lastname":"Test","totalprice":700,"depositpaid":true,"bookingdates":{"checkin":"2025-07-01","checkout":"2025-07-03"},"additionalneeds":"Dinner"}},"msg":"Booking created successfully"}
-{"level":"INFO","time":"2026-05-20T16:08:23.118Z","pid":31424,"environment":"development","bookingId":3476,"msg":"Deleting booking"}
-{"level":"INFO","time":"2026-05-20T16:08:23.397Z","pid":31424,"environment":"development","bookingId":3476,"status":201,"msg":"Booking deleted successfully"}
