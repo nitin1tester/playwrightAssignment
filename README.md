@@ -30,8 +30,6 @@ ESLint:
 
 [![Playwright ESLint Report](https://img.shields.io/badge/Playwright-Report-yellow)](https://nitin1tester.github.io/playwrightAssignment/eslint-report/index.html)
 
-[![ESLint](https://github.com/nitin1tester/playwrightAssignment/actions/workflows/playwright-run.yml/badge.svg)](https://github.com/nitin1tester/playwrightAssignment/actions/workflows/playwright-run.yml)
-
 Dev Environment:
 
 [![Playwright Dev Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/dev/playwright-report/index.html)
