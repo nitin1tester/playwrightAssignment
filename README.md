@@ -28,7 +28,7 @@ Click the badges below to view the latest reports published via GitHub Pages:
 
 ESLint:
 
-[![Playwright ESLint Report](https://img.shields.io/badge/Playwright-Report-yellow)](https://nitin1tester.github.io/playwrightAssignment/eslint-report/index.html)
+[![Playwright ESLint Report](https://img.shields.io/badge/Playwright-ESLint-Report-yellow)](https://nitin1tester.github.io/playwrightAssignment/eslint-report/index.html)
 
 Dev Environment:
 
