@@ -50,9 +50,9 @@ Stage Environment:
 
 Production Environment:
 
-[![Playwright Stage Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/prod/playwright-report/index.html)
-[![Playwright Stage HTML Reporter](https://img.shields.io/badge/Playwright_HTML-Report-green)](https://nitin1tester.github.io/playwrightAssignment/prod/playwright-html-report/index.html)
-[![Allure Stage Report](https://img.shields.io/badge/Allure-Report-red)](https://nitin1tester.github.io/playwrightAssignment/prod/allure-report/index.html)
+[![Playwright Production Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/prod/playwright-report/index.html)
+[![Playwright Production HTML Reporter](https://img.shields.io/badge/Playwright_HTML-Report-green)](https://nitin1tester.github.io/playwrightAssignment/prod/playwright-html-report/index.html)
+[![Allure Production Report](https://img.shields.io/badge/Allure-Report-red)](https://nitin1tester.github.io/playwrightAssignment/prod/allure-report/index.html)
 
 
 
