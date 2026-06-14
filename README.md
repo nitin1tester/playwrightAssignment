@@ -8,7 +8,9 @@ Welcome to the **PWSwagLabsUIFramework** automation project. Below you can find 
 
 ## Workflow Status
 
-[![Playwright Tests](https://github.com/nitin1tester/playwrightAssignment/blob/main/.github/workflows/playwright-run.yml/badge.svg)](https://github.com/nitin1tester/playwrightAssignment/blob/main/.github/workflows/playwright-run.yml)
+<!-- [![Playwright Tests](https://github.com/nitin1tester/playwrightAssignment/blob/main/.github/workflows/playwright-run.yml/badge.svg)](https://github.com/nitin1tester/playwrightAssignment/blob/main/.github/workflows/playwright-run.yml) -->
+
+[![Playwright Tests](https://github.com/nitin1tester/playwrightAssignment/actions/workflows/playwright-run.yml/badge.svg)](https://github.com/nitin1tester/playwrightAssignment/actions/workflows/playwright-run.yml)
 
 ---
 
