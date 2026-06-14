@@ -1,6 +1,6 @@
 Playwright Hybrid Automation Framework
 
-# PlayWright Framework Demo Automation Reports
+# Playwright Framework Demo Automation Reports
 
 Welcome to the **PWSwagLabsUIFramework** automation project. Below you can find the latest test results and HTML reports.
 
