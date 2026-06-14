@@ -24,23 +24,23 @@ Click the badges below to view the Dashboard published via GitHub Pages:
 
 Click the badges below to view the latest reports published via GitHub Pages:
 
-[![Playwright Report](https://img.shields.io/badge/Playwright-Report-yellow)](https://nitin1tester.github.io/playwrightAssignment/dev/playwright-report/index.html)
+[![Playwright ESLint Report](https://img.shields.io/badge/Playwright-Report-yellow)](https://nitin1tester.github.io/playwrightAssignment/eslint-report/index.html)
 
-[![Playwright Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/dev/playwright-report/index.html)
-[![Playwright HTML Reporter](https://img.shields.io/badge/Playwright_HTML-Report-green)](https://nitin1tester.github.io/playwrightAssignment/dev/playwright-html-report/index.html)
-[![Allure Report](https://img.shields.io/badge/Allure-Report-red)](https://nitin1tester.github.io/playwrightAssignment/dev/allure-report/index.html)
+[![Playwright Dev Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/dev/playwright-report/index.html)
+[![Playwright Dev HTML Reporter](https://img.shields.io/badge/Playwright_HTML-Report-green)](https://nitin1tester.github.io/playwrightAssignment/dev/playwright-html-report/index.html)
+[![Allure Dev Report](https://img.shields.io/badge/Allure-Report-red)](https://nitin1tester.github.io/playwrightAssignment/dev/allure-report/index.html)
 
-[![Playwright Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/qa/playwright-report/index.html)
-[![Playwright HTML Reporter](https://img.shields.io/badge/Playwright_HTML-Report-green)](https://nitin1tester.github.io/playwrightAssignment/qa/playwright-html-report/index.html)
-[![Allure Report](https://img.shields.io/badge/Allure-Report-red)](https://nitin1tester.github.io/playwrightAssignment/qa/allure-report/index.html)
+[![Playwright QA Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/qa/playwright-report/index.html)
+[![Playwright QA HTML Reporter](https://img.shields.io/badge/Playwright_HTML-Report-green)](https://nitin1tester.github.io/playwrightAssignment/qa/playwright-html-report/index.html)
+[![Allure QA Report](https://img.shields.io/badge/Allure-Report-red)](https://nitin1tester.github.io/playwrightAssignment/qa/allure-report/index.html)
 
-[![Playwright Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/stage/playwright-report/index.html)
-[![Playwright HTML Reporter](https://img.shields.io/badge/Playwright_HTML-Report-green)](https://nitin1tester.github.io/playwrightAssignment/stage/playwright-html-report/index.html)
-[![Allure Report](https://img.shields.io/badge/Allure-Report-red)](https://nitin1tester.github.io/playwrightAssignment/stage/allure-report/index.html)
+[![Playwright Stage Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/stage/playwright-report/index.html)
+[![Playwright Stage HTML Reporter](https://img.shields.io/badge/Playwright_HTML-Report-green)](https://nitin1tester.github.io/playwrightAssignment/stage/playwright-html-report/index.html)
+[![Allure Stage Report](https://img.shields.io/badge/Allure-Report-red)](https://nitin1tester.github.io/playwrightAssignment/stage/allure-report/index.html)
 
-[![Playwright Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/prod/playwright-report/index.html)
-[![Playwright HTML Reporter](https://img.shields.io/badge/Playwright_HTML-Report-green)](https://nitin1tester.github.io/playwrightAssignment/prod/playwright-html-report/index.html)
-[![Allure Report](https://img.shields.io/badge/Allure-Report-red)](https://nitin1tester.github.io/playwrightAssignment/prod/allure-report/index.html)
+[![Playwright Stage Report](https://img.shields.io/badge/Playwright-Report-blue)](https://nitin1tester.github.io/playwrightAssignment/prod/playwright-report/index.html)
+[![Playwright Stage HTML Reporter](https://img.shields.io/badge/Playwright_HTML-Report-green)](https://nitin1tester.github.io/playwrightAssignment/prod/playwright-html-report/index.html)
+[![Allure Stage Report](https://img.shields.io/badge/Allure-Report-red)](https://nitin1tester.github.io/playwrightAssignment/prod/allure-report/index.html)
 
 
 
