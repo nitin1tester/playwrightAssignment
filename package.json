@@ -1,7 +1,7 @@
 {
   "name": "@nitin1tester/pwswaglabsuiframework",
-  "version": "1.0.1",
-  "description": "playwright test framework",
+  "version": "1.0.3",
+  "description": "playwright test framework 1.0.3",
   "main": "dist/index.js",
   "type": "dist/index.d.ts",
   "scripts": {
