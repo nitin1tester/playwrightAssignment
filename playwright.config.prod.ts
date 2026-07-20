@@ -66,7 +66,7 @@ export default defineConfig({
     },
 
     {
-      name: 'Fireox',
+      name: 'Firefox',
       workers: 2,
       testMatch: /.*ui.*\.spec\.ts/,
       use: { ...devices['Desktop Firefox'] },
