@@ -1,4 +1,0 @@
-{"level":"INFO","time":"2026-07-29T07:32:39.756Z","pid":4664,"environment":"development","endpoint":"/booking","payload":{"firstname":"Delete","lastname":"Test","totalprice":700,"depositpaid":true,"bookingdates":{"checkin":"2025-07-01","checkout":"2025-07-03"},"additionalneeds":"Dinner"},"msg":"Creating booking"}
-{"level":"INFO","time":"2026-07-29T07:32:39.780Z","pid":4664,"environment":"development","status":200,"response":{"bookingid":889,"booking":{"firstname":"Delete","lastname":"Test","totalprice":700,"depositpaid":true,"bookingdates":{"checkin":"2025-07-01","checkout":"2025-07-03"},"additionalneeds":"Dinner"}},"msg":"Booking created successfully"}
-{"level":"INFO","time":"2026-07-29T07:32:39.781Z","pid":4664,"environment":"development","bookingId":889,"msg":"Deleting booking"}
-{"level":"INFO","time":"2026-07-29T07:32:39.805Z","pid":4664,"environment":"development","bookingId":889,"status":201,"msg":"Booking deleted successfully"}
