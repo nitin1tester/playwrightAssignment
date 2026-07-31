@@ -1,0 +1,24 @@
+Filled text : standard_user into element : getByRole('textbox', { name: 'Username' })
+{"level":"DEBUG","time":"2026-07-31T07:35:48.390Z","pid":5099,"environment":"development","msg":"Filled text : standard_user into element : getByRole('textbox', { name: 'Username' })"}
+Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })
+{"level":"DEBUG","time":"2026-07-31T07:35:48.405Z","pid":5099,"environment":"development","msg":"Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })"}
+Clicked on element : getByRole('button', { name: 'Login' })
+{"level":"DEBUG","time":"2026-07-31T07:35:48.447Z","pid":5099,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Login' })"}
+Clicked on element : getByRole('button', { name: 'Open Menu' })
+{"level":"DEBUG","time":"2026-07-31T07:35:48.498Z","pid":5099,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Open Menu' })"}
+is logout button visible -: true
+this is product list => Sauce Labs Backpack,Sauce Labs Bike Light,Sauce Labs Bolt T-Shirt,Sauce Labs Fleece Jacket,Sauce Labs Onesie,Test.allTheThings() T-Shirt (Red)
+is Cart Badge visible true
+Clicked on element : locator('[data-test="shopping-cart-link"]')
+{"level":"DEBUG","time":"2026-07-31T07:35:48.630Z","pid":5099,"environment":"development","msg":"Clicked on element : locator('[data-test=\"shopping-cart-link\"]')"}
+Clicked on element : getByRole('button', { name: 'Checkout' })
+{"level":"DEBUG","time":"2026-07-31T07:35:48.688Z","pid":5099,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Checkout' })"}
+Filled text : R into element : getByRole('textbox', { name: 'Last Name' })
+{"level":"DEBUG","time":"2026-07-31T07:35:48.700Z","pid":5099,"environment":"development","msg":"Filled text : R into element : getByRole('textbox', { name: 'Last Name' })"}
+Filled Last Name R
+Filled text : 123123 into element : getByRole('textbox', { name: 'Zip/Postal Code' })
+{"level":"DEBUG","time":"2026-07-31T07:35:48.719Z","pid":5099,"environment":"development","msg":"Filled text : 123123 into element : getByRole('textbox', { name: 'Zip/Postal Code' })"}
+Filled Zip Code 123123
+Clicked on element : getByRole('button', { name: 'Continue' })
+{"level":"DEBUG","time":"2026-07-31T07:35:48.744Z","pid":5099,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Continue' })"}
+Got text from error message : Error: First Name is required
