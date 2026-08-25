@@ -1,4 +1,0 @@
-{"level":"INFO","time":"2026-08-24T05:27:30.051Z","pid":4543,"environment":"development","endpoint":"/auth","payload":{"username":"admin","password":"password123"},"msg":"Creating authentication token"}
-{"level":"INFO","time":"2026-08-24T05:27:30.339Z","pid":4543,"environment":"development","status":200,"response":{"token":"baa88abae3c3fff"},"msg":"Authentication response received"}
-{"level":"INFO","time":"2026-08-24T05:27:30.352Z","pid":4543,"environment":"development","endpoint":"/auth","payload":{"username":"admin","password":"password123"},"msg":"Creating authentication token"}
-{"level":"INFO","time":"2026-08-24T05:27:30.408Z","pid":4543,"environment":"development","status":200,"response":{"token":"7c792e09c73354c"},"msg":"Authentication response received"}
