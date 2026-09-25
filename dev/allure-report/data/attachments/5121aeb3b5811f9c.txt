@@ -1,0 +1,12 @@
+Filled text : standard_user into element : getByRole('textbox', { name: 'Username' })
+{"level":"DEBUG","time":"2026-09-25T09:48:37.847Z","pid":6327,"environment":"development","msg":"Filled text : standard_user into element : getByRole('textbox', { name: 'Username' })"}
+Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })
+{"level":"DEBUG","time":"2026-09-25T09:48:37.855Z","pid":6327,"environment":"development","msg":"Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })"}
+Clicked on element : getByRole('button', { name: 'Login' })
+{"level":"DEBUG","time":"2026-09-25T09:48:37.874Z","pid":6327,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Login' })"}
+Clicked on element : getByRole('button', { name: 'Open Menu' })
+{"level":"DEBUG","time":"2026-09-25T09:48:37.916Z","pid":6327,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Open Menu' })"}
+is logout button visible -: false
+navigated to url : https://www.saucedemo.com/inventory-item.html?id=999
+{"level":"DEBUG","time":"2026-09-25T09:48:37.970Z","pid":6327,"environment":"development","msg":"navigated to url : https://www.saucedemo.com/inventory-item.html?id=999"}
+is Item not visible label found : true
