@@ -1,0 +1,6 @@
+{"level":"INFO","time":"2026-05-20T16:08:19.572Z","pid":31424,"environment":"development","endpoint":"/auth","payload":{"username":"admin","password":"password123"},"msg":"Creating authentication token"}
+{"level":"INFO","time":"2026-05-20T16:08:19.902Z","pid":31424,"environment":"development","status":200,"response":{"token":"044bb628841e395"},"msg":"Authentication response received"}
+{"level":"INFO","time":"2026-05-20T16:08:19.937Z","pid":31424,"environment":"development","endpoint":"/booking","payload":{"firstname":"Nitin","lastname":"Rastogi","totalprice":500,"depositpaid":true,"bookingdates":{"checkin":"2025-09-01","checkout":"2025-09-05"},"additionalneeds":"Breakfast"},"msg":"Creating booking"}
+{"level":"INFO","time":"2026-05-20T16:08:20.228Z","pid":31424,"environment":"development","status":200,"response":{"bookingid":3457,"booking":{"firstname":"Nitin","lastname":"Rastogi","totalprice":500,"depositpaid":true,"bookingdates":{"checkin":"2025-09-01","checkout":"2025-09-05"},"additionalneeds":"Breakfast"}},"msg":"Booking created successfully"}
+{"level":"INFO","time":"2026-05-20T16:08:20.230Z","pid":31424,"environment":"development","bookingId":3457,"msg":"Fetching booking details"}
+{"level":"INFO","time":"2026-05-20T16:08:20.510Z","pid":31424,"environment":"development","bookingId":3457,"status":200,"msg":"Booking fetch response received"}
