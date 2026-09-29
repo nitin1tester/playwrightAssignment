@@ -25,7 +25,7 @@ export class LoginPage {
         this.username = page.getByRole('textbox', { name: 'Username' });
         this.password = page.getByRole('textbox', { name: 'Password' });
         this.loginBtn = page.getByRole('button', { name: 'Login' });
-        this.warningMsg = page.getByRole('heading', { name: 'Epic sadface: Username and password do not match any user in this service', level: 3 });
+        this.warningMsg = page.getByText('Epic sadface: Username and password do not match any user in this service', { exact: true });
     }
 
     //3. page method
@@ -52,6 +52,7 @@ export class LoginPage {
      * @returns String or null
      */
     async getInvalidLoginMessage(): Promise<string | null> {
+        await this.warningMsg.waitFor({ state: 'visible' });
         const errorMsg = await this.eleUtil.getText(this.warningMsg);
         console.log('Invlid login warning message: ' + errorMsg);
         return errorMsg;

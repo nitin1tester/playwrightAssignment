@@ -35,7 +35,7 @@ export class CheckoutCompletePage {
     }
 
     async isOrderConfirmationMsgVisible():Promise<boolean>{
-        const isOrderConfirmedFlag:boolean = await this.eleUtil.isVisible(this.orderConfirmationMsg);
+        const isOrderConfirmedFlag:boolean = await this.eleUtil.waitForElementVisible(this.orderConfirmationMsg,5000);
         console.log('is order confirmed : ' + isOrderConfirmedFlag);
         return isOrderConfirmedFlag;
     }

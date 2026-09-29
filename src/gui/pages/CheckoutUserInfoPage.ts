@@ -29,7 +29,7 @@ export class CheckoutUserInfoPage {
         this.lNameTextbox = page.getByRole('textbox', { name: 'Last Name' });
         this.zipTextbox = page.getByRole('textbox', { name: 'Zip/Postal Code' });
         this.continueBtn = page.getByRole('button', { name: 'Continue' });
-        this.errorFirstnameBlank = page.getByRole('heading', { name: 'Error: First Name is required', level: 3 });
+        this.errorFirstnameBlank = page.getByText('Error: First Name is required', { exact: true }); //page.locator('[data-test="error"]'); //page.getByRole('heading', { name: 'Error: First Name is required', level: 3 });
     }
 
     //3. page method
