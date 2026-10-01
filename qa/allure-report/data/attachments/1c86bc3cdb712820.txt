@@ -1,2 +1,0 @@
-{"level":"INFO","time":"2026-09-30T10:45:22.261Z","pid":4825,"environment":"development","bookingId":999999,"msg":"Fetching booking details"}
-{"level":"INFO","time":"2026-09-30T10:45:22.335Z","pid":4825,"environment":"development","bookingId":999999,"status":404,"msg":"Booking fetch response received"}
