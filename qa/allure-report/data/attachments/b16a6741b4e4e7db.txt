@@ -1,0 +1,4 @@
+{"level":"INFO","time":"2026-10-09T11:35:20.794Z","pid":4573,"environment":"development","endpoint":"/booking","payload":{"firstname":"Nitin","lastname":"Rastogi","totalprice":500,"depositpaid":true,"bookingdates":{"checkin":"2025-09-01","checkout":"2025-09-05"},"additionalneeds":"Breakfast"},"msg":"Creating booking"}
+{"level":"INFO","time":"2026-10-09T11:35:20.881Z","pid":4573,"environment":"development","status":200,"response":{"bookingid":2309,"booking":{"firstname":"Nitin","lastname":"Rastogi","totalprice":500,"depositpaid":true,"bookingdates":{"checkin":"2025-09-01","checkout":"2025-09-05"},"additionalneeds":"Breakfast"}},"msg":"Booking created successfully"}
+{"level":"INFO","time":"2026-10-09T11:35:20.882Z","pid":4573,"environment":"development","bookingId":2309,"msg":"Fetching booking details"}
+{"level":"INFO","time":"2026-10-09T11:35:20.967Z","pid":4573,"environment":"development","bookingId":2309,"status":200,"msg":"Booking fetch response received"}
