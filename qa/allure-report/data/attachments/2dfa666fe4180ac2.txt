@@ -1,7 +1,0 @@
-Filled text : wrongData into element : getByRole('textbox', { name: 'Username' })
-{"level":"DEBUG","time":"2026-10-17T08:54:31.007Z","pid":8302,"environment":"development","msg":"Filled text : wrongData into element : getByRole('textbox', { name: 'Username' })"}
-Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })
-{"level":"DEBUG","time":"2026-10-17T08:54:31.029Z","pid":8302,"environment":"development","msg":"Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })"}
-Clicked on element : getByRole('button', { name: 'Login' })
-{"level":"DEBUG","time":"2026-10-17T08:54:31.065Z","pid":8302,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Login' })"}
-Invlid login warning message: Epic sadface: Username and password do not match any user in this service
