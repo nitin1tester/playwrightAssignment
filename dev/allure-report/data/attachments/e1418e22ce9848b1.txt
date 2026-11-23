@@ -1,0 +1,15 @@
+┌──────────┬────────────────┐
+│ (index)  │ Values         │
+├──────────┼────────────────┤
+│ username │ 'problem_user' │
+│ password │ 'secret_sauce' │
+└──────────┴────────────────┘
+Filled text : problem_user into element : getByRole('textbox', { name: 'Username' })
+{"level":"DEBUG","time":"2026-11-23T15:16:46.046Z","pid":30639,"environment":"development","msg":"Filled text : problem_user into element : getByRole('textbox', { name: 'Username' })"}
+Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })
+{"level":"DEBUG","time":"2026-11-23T15:16:46.062Z","pid":30639,"environment":"development","msg":"Filled text : secret_sauce into element : getByRole('textbox', { name: 'Password' })"}
+Clicked on element : getByRole('button', { name: 'Login' })
+{"level":"DEBUG","time":"2026-11-23T15:16:46.090Z","pid":30639,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Login' })"}
+Clicked on element : getByRole('button', { name: 'Open Menu' })
+{"level":"DEBUG","time":"2026-11-23T15:16:46.142Z","pid":30639,"environment":"development","msg":"Clicked on element : getByRole('button', { name: 'Open Menu' })"}
+is logout button visible -: false
